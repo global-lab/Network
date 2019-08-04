@@ -49,10 +49,10 @@
       <h1 id="sponsorTitle" style="text-align: center;">Click on a country to find out about past IQP sponsors</h1>
     </div>
 
-    <div class="col-sm-12">
-      <table class="table table-bordered" id="sponsorList">
+    <div class="col-sm-12" id="sponsorList">
+     <!--  <table class="table table-bordered" id="sponsorList">
 
-      </table>
+      </table> -->
     </div>
     
 
@@ -111,10 +111,10 @@
           code = countryCodes[info.Center]
 
           if(sponsorInfo[code]){
-            sponsorInfo[code].push(info.Sponsor);
+            sponsorInfo[code].push({"sponsor": info.Sponsor, "center": info.Center});
           }
           else{
-            sponsorInfo[code] = [info.Sponsor];
+            sponsorInfo[code] = [{"sponsor": info.Sponsor, "center": info.Center}];
           }
           
         })
@@ -169,7 +169,23 @@
           var i = 0
 
           Object.keys(sponsorInfo).forEach(function(key) {
-              // console.log(key, sponsorInfo[key]);
+              console.log(key, sponsorInfo[key]);
+
+              tempData = {}
+
+              sponsorInfo[key].forEach(function(info){
+                console.log(info.sponsor, info.center)
+
+
+                if(tempData[info.center]){
+                  tempData[info.center].push(info.sponsor);
+                }
+                else{
+                  tempData[info.center] = [info.sponsor];
+                }
+              })
+
+
 
               groupData.push({
                 "name": key,
@@ -177,7 +193,8 @@
                 "data": [
                   {
                     "id": key,
-                    "sponsors": [...new Set(sponsorInfo[key])]
+                    "sponsorInfo": tempData,
+                    "sponsors": [...new Set(sponsorInfo[key].sponsor)]
                   }
                 ]
               })
@@ -408,9 +425,10 @@
             })
 
             mapPolygonTemplate.events.on("hit", function(event) {
+              sponsorCenterInfo = event.target.dataItem.dataContext.sponsorInfo
               countryName = event.target.dataItem.dataContext.name;
-              SponsorArray = event.target.dataItem.dataContext.sponsors;
-              updateTable(countryName, SponsorArray)
+              console.log(sponsorCenterInfo)
+              updateTable(countryName, sponsorCenterInfo)
             });
 
             // States  
@@ -445,7 +463,7 @@
 
 
 
-      function updateTable(country, sponsors){
+      function updateTable(country, sponsorCenterInfo){
 
         var title = document.getElementById("sponsorTitle");
         title.innerHTML = country + " Sponsors";
@@ -455,72 +473,93 @@
         tableRef.innerHTML = "";
 
 
+        Object.keys(sponsorCenterInfo).forEach(function(key) {
+          console.log(key, sponsorCenterInfo[key])
 
-        for(var i = 0; i < sponsors.length; i+=6){
-          // Insert a row at the end of the table
-          var newRow = tableRef.insertRow(-1);
+          center = key;
+          sponsors = sponsorCenterInfo[key]
 
-          // Insert a cell in the row at index 0
-          var newCell1 = newRow.insertCell(0);
-          var newCell2 = newRow.insertCell(1);
-          var newCell3 = newRow.insertCell(2);
-          var newCell4 = newRow.insertCell(3);
-          var newCell5 = newRow.insertCell(4);
-          var newCell6 = newRow.insertCell(5);
+          var centerTitle = document.createElement("H3");
+          centerTitle.setAttribute('style', 'text-align: center');
+          centerTitle.innerHTML = center;
+          tableRef.appendChild(centerTitle)
 
-          // Append a text node to the cell
+          var table = document.createElement("TABLE");
+          table.setAttribute('class', 'table table-bordered');
+          tableRef.appendChild(table)
+
+          for(var i = 0; i < sponsors.length; i+=6){
+            // Insert a row at the end of the table
+            var newRow = table.insertRow(-1);
+
+            // Insert a cell in the row at index 0
+            var newCell1 = newRow.insertCell(0);
+            var newCell2 = newRow.insertCell(1);
+            var newCell3 = newRow.insertCell(2);
+            var newCell4 = newRow.insertCell(3);
+            var newCell5 = newRow.insertCell(4);
+            var newCell6 = newRow.insertCell(5);
+
+            // Append a text node to the cell
 
 
 
-          if(sponsors[i] == null){
-            var newText1 = document.createTextNode("");
-          }
-          else{
-            var newText1 = document.createTextNode(sponsors[i]);
+            if(sponsors[i] == null){
+              var newText1 = document.createTextNode("");
+            }
+            else{
+              var newText1 = document.createTextNode(sponsors[i]);
+            }
+
+            if(sponsors[i+1] == null){
+              var newText2 = document.createTextNode("");
+            }
+            else{
+              var newText2 = document.createTextNode(sponsors[i+1]);
+            }
+
+            if(sponsors[i+2] == null){
+              var newText3 = document.createTextNode("");
+            }
+            else{
+              var newText3 = document.createTextNode(sponsors[i+2]);
+            }
+
+            if(sponsors[i+3] == null){
+              var newText4 = document.createTextNode("");
+            }
+            else{
+              var newText4 = document.createTextNode(sponsors[i+3]);
+            }
+
+            if(sponsors[i+4] == null){
+              var newText5 = document.createTextNode("");
+            }
+            else{
+              var newText5 = document.createTextNode(sponsors[i+4]);
+            }
+
+            if(sponsors[i+5] == null){
+              var newText6 = document.createTextNode("");
+            }
+            else{
+              var newText6 = document.createTextNode(sponsors[i+5]);
+            }
+
+            newCell1.appendChild(newText1);
+            newCell2.appendChild(newText2);
+            newCell3.appendChild(newText3);
+            newCell4.appendChild(newText4);
+            newCell5.appendChild(newText5);
+            newCell6.appendChild(newText6);
           }
 
-          if(sponsors[i+1] == null){
-            var newText2 = document.createTextNode("");
-          }
-          else{
-            var newText2 = document.createTextNode(sponsors[i+1]);
-          }
 
-          if(sponsors[i+2] == null){
-            var newText3 = document.createTextNode("");
-          }
-          else{
-            var newText3 = document.createTextNode(sponsors[i+2]);
-          }
 
-          if(sponsors[i+3] == null){
-            var newText4 = document.createTextNode("");
-          }
-          else{
-            var newText4 = document.createTextNode(sponsors[i+3]);
-          }
+        });
 
-          if(sponsors[i+4] == null){
-            var newText5 = document.createTextNode("");
-          }
-          else{
-            var newText5 = document.createTextNode(sponsors[i+4]);
-          }
 
-          if(sponsors[i+5] == null){
-            var newText6 = document.createTextNode("");
-          }
-          else{
-            var newText6 = document.createTextNode(sponsors[i+5]);
-          }
-
-          newCell1.appendChild(newText1);
-          newCell2.appendChild(newText2);
-          newCell3.appendChild(newText3);
-          newCell4.appendChild(newText4);
-          newCell5.appendChild(newText5);
-          newCell6.appendChild(newText6);
-        }
+        
 
 
         
