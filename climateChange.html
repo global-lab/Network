@@ -33,8 +33,8 @@
           <a class="navbar-brand" href="#">WPI IQP Data</a>
         </div>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="index.html">Sponsors</a></li>
-          <li><a href="climateChange.html">Climate Change</a></li>
+          <li><a href="index.html">Sponsors</a></li>
+          <li class="active"><a href="climateChange.html">Climate Change</a></li>
         </ul>
       </div>
     </nav>
@@ -101,26 +101,26 @@
       }
 
 
-      sponsorInfo = {};
+      climateInfo = {};
 
 
-      d3.csv("SponsorInformationUpdated.csv", function(data) {
+      d3.csv("climateChange.csv", function(data) {
         console.log(data);
         
         data.forEach(function(info){
 
           code = countryCodes[info.Center]
 
-          if(sponsorInfo[code]){
-            sponsorInfo[code].push({"sponsor": info.Sponsor, "center": info.Center});
+          if(climateInfo[code]){
+            climateInfo[code].push({"title": info.Title, "center": info.Center, "sponsor": info.Sponsor, "URL": info.URL});
           }
           else{
-            sponsorInfo[code] = [{"sponsor": info.Sponsor, "center": info.Center}];
+            climateInfo[code] = [{"title": info.Title, "center": info.Center, "sponsor": info.Sponsor, "URL": info.URL}];
           }
           
         })
 
-        console.log(sponsorInfo);
+        console.log(climateInfo);
 
         createMap()
       });
@@ -169,24 +169,8 @@
           var groupData = [];
           var i = 0
 
-          Object.keys(sponsorInfo).forEach(function(key) {
-              // console.log(key, sponsorInfo[key]);
-
-              tempData = {}
-
-              sponsorInfo[key].forEach(function(info){
-                // console.log(info.sponsor, info.center)
-
-
-                if(tempData[info.center]){
-                  tempData[info.center].push(info.sponsor);
-                }
-                else{
-                  tempData[info.center] = [info.sponsor];
-                }
-              })
-
-
+          Object.keys(climateInfo).forEach(function(key) {
+              // console.log(key, climateInfo[key]);
 
               groupData.push({
                 "name": key,
@@ -194,8 +178,7 @@
                 "data": [
                   {
                     "id": key,
-                    "sponsorInfo": tempData,
-                    "sponsors": [...new Set(sponsorInfo[key].sponsor)]
+                    "climateInfo": climateInfo[key]
                   }
                 ]
               })
@@ -426,10 +409,10 @@
             })
 
             mapPolygonTemplate.events.on("hit", function(event) {
-              sponsorCenterInfo = event.target.dataItem.dataContext.sponsorInfo
+              climateCenterInfo = event.target.dataItem.dataContext.climateInfo
               countryName = event.target.dataItem.dataContext.name;
-              console.log(sponsorCenterInfo)
-              updateTable(countryName, sponsorCenterInfo)
+              console.log(climateCenterInfo)
+              updateTable(countryName, climateCenterInfo)
             });
 
             // States  
@@ -464,7 +447,9 @@
 
 
 
-      function updateTable(country, sponsorCenterInfo){
+      function updateTable(country, climateCenterInfo){
+
+        // console.log(climateCenterInfo)
 
         var title = document.getElementById("sponsorTitle");
         title.innerHTML = country + " Sponsors";
@@ -474,11 +459,28 @@
         tableRef.innerHTML = "";
 
 
-        Object.keys(sponsorCenterInfo).forEach(function(key) {
-          console.log(key, sponsorCenterInfo[key])
+        centerData = {}
+
+        climateCenterInfo.forEach(function(info){
+
+
+          if(centerData[info.center]){
+            centerData[info.center].push({"title": info.title, "sponsor": info.sponsor, "URL": info.URL});
+          }
+          else{
+            centerData[info.center] = [{"title": info.title, "sponsor": info.sponsor, "URL": info.URL}];
+          }
+        })
+
+
+        console.log(centerData)
+
+
+        Object.keys(centerData).forEach(function(key) {
+          // console.log(key, climateCenterInfo[key])
 
           center = key;
-          sponsors = sponsorCenterInfo[key]
+          IQPs = centerData[key]
 
           var centerTitle = document.createElement("H3");
           centerTitle.setAttribute('style', 'text-align: center');
@@ -489,7 +491,9 @@
           table.setAttribute('class', 'table table-bordered');
           tableRef.appendChild(table)
 
-          for(var i = 0; i < sponsors.length; i+=6){
+          
+
+          for(var i = 0; i < IQPs.length; i+=1){
             // Insert a row at the end of the table
             var newRow = table.insertRow(-1);
 
@@ -497,62 +501,43 @@
             var newCell1 = newRow.insertCell(0);
             var newCell2 = newRow.insertCell(1);
             var newCell3 = newRow.insertCell(2);
-            var newCell4 = newRow.insertCell(3);
-            var newCell5 = newRow.insertCell(4);
-            var newCell6 = newRow.insertCell(5);
 
             // Append a text node to the cell
 
+            var aTag = document.createElement("A");
 
 
-            if(sponsors[i] == null){
+            if(IQPs[i].title == null){
               var newText1 = document.createTextNode("");
             }
             else{
-              var newText1 = document.createTextNode(sponsors[i]);
+              var newText1 = document.createTextNode(IQPs[i].title);
             }
 
-            if(sponsors[i+1] == null){
+            if(IQPs[i].sponsor == null){
               var newText2 = document.createTextNode("");
             }
             else{
-              var newText2 = document.createTextNode(sponsors[i+1]);
+              var newText2 = document.createTextNode(IQPs[i].sponsor);
             }
 
-            if(sponsors[i+2] == null){
+            if(IQPs[i].URL == null){
               var newText3 = document.createTextNode("");
             }
             else{
-              var newText3 = document.createTextNode(sponsors[i+2]);
+              var newText3 = document.createTextNode(IQPs[i].URL);
+
+              aTag.setAttribute('href', IQPs[i].URL);
+              aTag.setAttribute('target', "_blank");
             }
 
-            if(sponsors[i+3] == null){
-              var newText4 = document.createTextNode("");
-            }
-            else{
-              var newText4 = document.createTextNode(sponsors[i+3]);
-            }
-
-            if(sponsors[i+4] == null){
-              var newText5 = document.createTextNode("");
-            }
-            else{
-              var newText5 = document.createTextNode(sponsors[i+4]);
-            }
-
-            if(sponsors[i+5] == null){
-              var newText6 = document.createTextNode("");
-            }
-            else{
-              var newText6 = document.createTextNode(sponsors[i+5]);
-            }
 
             newCell1.appendChild(newText1);
             newCell2.appendChild(newText2);
-            newCell3.appendChild(newText3);
-            newCell4.appendChild(newText4);
-            newCell5.appendChild(newText5);
-            newCell6.appendChild(newText6);
+
+            aTag.appendChild(newText3);
+            newCell3.appendChild(aTag);
+
           }
 
 
