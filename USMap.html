@@ -5,6 +5,7 @@
     <script src="https://www.amcharts.com/lib/4/core.js"></script>
     <script src="https://www.amcharts.com/lib/4/maps.js"></script>
     <script src="https://www.amcharts.com/lib/4/geodata/worldHigh.js"></script>
+    <script src="https://www.amcharts.com/lib/4/geodata/usaLow.js"></script>
     <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
     <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -441,6 +442,19 @@
           worldSeries.hiddenInLegend = true;
           worldSeries.mapPolygons.template.nonScalingStroke = true;
 
+
+          // Series for United States map
+		var usaSeries = chart.series.push(new am4maps.MapPolygonSeries());
+		usaSeries.geodata = am4geodata_usaLow;
+
+		var usPolygonTemplate = usaSeries.mapPolygons.template;
+		usPolygonTemplate.tooltipText = "{name}";
+		usPolygonTemplate.fill = chart.colors.getIndex(1);
+		usPolygonTemplate.nonScalingStroke = true;
+
+		// Hover state
+		var hs = usPolygonTemplate .states.create("hover");
+		hs.properties.fill = am4core.color("#367B25");
 
         });  // end am4core.ready()
       }
