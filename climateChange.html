@@ -47,7 +47,7 @@
     <br>
 
     <div class="col-sm-12">
-      <h1 id="sponsorTitle" style="text-align: center;">Click on a country to find out about past IQP sponsors</h1>
+      <h1 id="sponsorTitle" style="text-align: center;">Click on a country to find out about past IQPs related to Climate Change</h1>
     </div>
 
     <div class="col-sm-12" id="sponsorList">
@@ -144,6 +144,7 @@
 
           // Zoom control
           chart.zoomControl = new am4maps.ZoomControl();
+          chart.chartContainer.wheelable = false;
 
           var homeButton = new am4core.Button();
           homeButton.events.on("hit", function() {
@@ -452,7 +453,7 @@
         // console.log(climateCenterInfo)
 
         var title = document.getElementById("sponsorTitle");
-        title.innerHTML = country + " Sponsors";
+        title.innerHTML = "Climate Change Projects in " + country;
 
 
         var tableRef = document.getElementById("sponsorList");
