@@ -438,9 +438,15 @@
           worldSeries.name = worldSeriesName;
           worldSeries.useGeodata = true;
           worldSeries.exclude = excludedCountries;
-          worldSeries.fillOpacity = 0.8;
+          worldSeries.fillOpacity = 1 ;
           worldSeries.hiddenInLegend = true;
           worldSeries.mapPolygons.template.nonScalingStroke = true;
+          worldSeries.fill = "#FFFFFF"
+          worldSeries.stroke = am4core.color("#FFFFFF")
+
+          console.log(worldSeries)
+          
+
 
 
         });  // end am4core.ready()
