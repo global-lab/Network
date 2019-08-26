@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/ > -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+    
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+    <style>
+
+      /*#chartdiv {
+        width: 100%;
+        height: 600px;
+      }*/
+
+      body { background-color: #30303d; color: #fff; }
+
+      #mapid { 
+        height: 75vh; 
+        width: 100%;
+        position: center;
+      }
+
+    </style>
+  
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">WPI IQP Data</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="index.html">Sponsors</a></li>
+          <li><a href="climateChange.html">Climate Change</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="col-sm-2" id="chartdiv">
+      
+    </div>
+    <div class="col-sm-8" id="chartdiv">
+      <div id="mapid"></div>
+    </div>
+    <div class="col-sm-2" id="chartdiv">
+      
+    </div>
+    
+
+<!--     <div class="col-sm-12" id="chartdiv">
+      
+    </div>
+
+    <br>
+    <br>
+
+    <div class="col-sm-12">
+      <h1 id="sponsorTitle" style="text-align: center;">Click on a country to find out about past IQP sponsors</h1>
+    </div>
+
+    <div class="col-sm-12" id="sponsorList">
+
+    </div> -->
+    
+
+    <script>
+
+      projectCenters = {
+        "Switzerland": [46.8182, 8.2275],
+        "United States": [37.0902, -95.7129],
+        "China": [35.8617, 104.1954]
+      }
+      
+
+      var mymap = L.map('mapid').setView([30, 10], 2);
+
+      var popup = L.popup();
+
+      createMap();
+
+
+
+      function createMap(){
+        
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+          maxZoom: 18,
+          id: 'mapbox.satellite',
+          accessToken: 'pk.eyJ1IjoiamFzb25hYmVsMTIzIiwiYSI6ImNqenNubWRnbDFibTQzbm1pOTNxbTIxemoifQ.9BZFzS-MQts7O6aGIoEqTw'
+        }).addTo(mymap);
+
+
+
+        Object.keys(projectCenters).forEach(function(key) {
+          console.log(key, projectCenters[key]);
+
+          var marker = L.marker(projectCenters[key]).addTo(mymap).bindPopup(key);
+
+          marker.on('mouseover', showPopup);
+          marker.on('mouseout', hidePopup);
+          marker.on('click', showPopup);
+         
+        })
+
+        // var marker1 = L.marker([46.8182, 8.2275]).addTo(mymap).bindPopup("<b>Hello world!</b><br />I am a popup.");
+        // var marker2 = L.marker([37.0902, 95.7129]).addTo(mymap);
+        // var marker3 = L.marker([35.8617, 104.1954]).addTo(mymap);
+
+
+        // marker.bindPopup("Switzerland");
+
+        
+
+  //       var popup = L.popup()
+  // .setLatLng([51.5, -0.09])
+  // .setContent("I am a standalone popup.")
+  // .openOn(mymap);
+
+      }
+
+      function showPopup(e){
+        // popup.setLatLng(e.latlng)
+        //   .setContent("You clicked the map at " + e.latlng.toString())
+        //   .openOn(mymap);
+        this.openPopup();
+      }
+
+      function hidePopup(e){
+        this.closePopup();
+      }
+      
+
+      // countryCodes ={
+      //   "Melbourne, Australia": "AU",
+      //   "London, England": "GB",
+      //   "Venice, Italy": "IT",
+      //   "Worcester Community Project Center": "US",
+      //   "Hong Kong, China": "CN",
+      //   "Washington, DC": "US",
+      //   "Namibia": "NA",
+      //   "Cape Town, South Africa": "ZA",
+      //   "San Jose, Costa Rica": "CR",
+      //   "Copenhagen, Denmark": "DK",
+      //   "Bangkok, Thailand": "TH",
+      //   "Costa Rica": "CR",
+      //   "New Zealand": "NZ",
+      //   "Sante Fe, New Mexico": "US",
+      //   "Boston, Massachusetts": "US",
+      //   "Worcester, MA": "US",
+      //   "Puerto Rico": "PR",
+      //   "Nantucket, Massachusetts": "US",
+      //   "Morocco": "MA",
+      //   "Zurich, Switzerland": "CH",
+      //   "Windhoek, Namibia": "NA",
+      //   "San Juan, Puerto Rico": "PR",
+      //   "India": "IN",
+      //   "Bar Harbor, Maine": "US",
+      //   "Albania": "AL",
+      //   "Russia": "RU",
+      //   "Hangzhou, China": "CN",
+      //   "Panama City, Panama": "PA",
+      //   "Microsoft Corporation": "US",
+      //   "Ifrane, Morocco": "MA",
+      //   "WORC / Worcester Community Project Center": "US",
+      //   "Wuhan, China": "CN",
+      //   "Japan (Multiple Cities)": "JP",
+      //   "Lille, France": "FR",
+      //   "Beijing, China": "CN",
+      //   "Darmstadt, Germany": "DE",
+      //   "Pioneer Valley Econ Dev": "US",
+      //   "Shanghai, China": "CN"
+      // }
+
+
+      // sponsorInfo = {};
+
+
+      // d3.csv("SponsorInformationUpdated.csv", function(data) {
+      //   console.log(data);
+        
+      //   data.forEach(function(info){
+
+      //     code = countryCodes[info.Center]
+
+      //     if(sponsorInfo[code]){
+      //       sponsorInfo[code].push({"sponsor": info.Sponsor, "center": info.Center});
+      //     }
+      //     else{
+      //       sponsorInfo[code] = [{"sponsor": info.Sponsor, "center": info.Center}];
+      //     }
+          
+      //   })
+
+      //   console.log(sponsorInfo);
+
+      //   createMap()
+      // });
+
+      // function createMap(){
+      //   am4core.ready(function() {
+
+      //     // Themes begin
+      //     am4core.useTheme(am4themes_dark);
+      //     am4core.useTheme(am4themes_animated);
+      //     // Themes end
+
+      //     // Create map instance
+      //     var chart = am4core.create("chartdiv", am4maps.MapChart);
+
+      //     // Set map definition
+      //     chart.geodata = am4geodata_worldHigh;
+
+      //     // Set projection
+      //     chart.projection = new am4maps.projections.Mercator();
+
+      //     // Zoom control
+      //     chart.zoomControl = new am4maps.ZoomControl();
+      //     chart.chartContainer.wheelable = false;
+
+      //     var homeButton = new am4core.Button();
+      //     homeButton.events.on("hit", function() {
+      //       chart.goHome();
+      //     });
+
+      //     homeButton.icon = new am4core.Sprite();
+      //     homeButton.padding(7, 5, 7, 5);
+      //     homeButton.width = 30;
+      //     homeButton.icon.path = "M16,8 L14,8 L14,16 L10,16 L10,10 L6,10 L6,16 L2,16 L2,8 L0,8 L8,0 L16,8 Z M16,8";
+      //     homeButton.marginBottom = 10;
+      //     homeButton.parent = chart.zoomControl;
+      //     homeButton.insertBefore(chart.zoomControl.plusButton);
+
+      //     // Center on the groups by default
+      //     chart.homeZoomLevel = 1.5;
+      //     chart.homeGeoPoint = { longitude: 0, latitude: 20 };
+
+      //     // This array will be populated with country IDs to exclude from the world series
+      //     var excludedCountries = ["AQ"];
+
+
+      //     var groupData = [];
+      //     var i = 0
+
+      //     Object.keys(sponsorInfo).forEach(function(key) {
+      //         // console.log(key, sponsorInfo[key]);
+
+      //         tempData = {}
+
+      //         sponsorInfo[key].forEach(function(info){
+      //           // console.log(info.sponsor, info.center)
+
+
+      //           if(tempData[info.center]){
+      //             tempData[info.center].push(info.sponsor);
+      //           }
+      //           else{
+      //             tempData[info.center] = [info.sponsor];
+      //           }
+      //         })
+
+
+
+      //         groupData.push({
+      //           "name": key,
+      //           "color": chart.colors.getIndex(i),
+      //           "data": [
+      //             {
+      //               "id": key,
+      //               "sponsorInfo": tempData,
+      //               "sponsors": [...new Set(sponsorInfo[key].sponsor)]
+      //             }
+      //           ]
+      //         })
+
+      //         i += 1;
+
+      //     });
+
+
+      //     //TODO get rid of duplicates
+
+
+      //     console.log(groupData)
+
+      //     // var groupData = [
+      //     //   {
+      //     //     "name": "EU member before 2004",
+      //     //     "color": chart.colors.getIndex(0),
+      //     //     "data": [
+      //     //       {
+      //     //         "title": "Austria",
+      //     //         "id": "AT", // With MapPolygonSeries.useGeodata = true, it will try and match this id, then apply the other properties as custom data
+      //     //         "customData": "1995"
+      //     //       }, {
+      //     //         "title": "Ireland",
+      //     //         "id": "IE",
+      //     //         "customData": "1973"
+      //     //       }, {
+      //     //         "title": "Denmark",
+      //     //         "id": "DK",
+      //     //         "customData": "1973"
+      //     //       }, {
+      //     //         "title": "Finland",
+      //     //         "id": "FI",
+      //     //         "customData": "1995"
+      //     //       }, {
+      //     //         "title": "Sweden",
+      //     //         "id": "SE",
+      //     //         "customData": "1995"
+      //     //       }, {
+      //     //         "title": "Great Britain",
+      //     //         "id": "GB",
+      //     //         "customData": "1973"
+      //     //       }, {
+      //     //         "title": "Italy",
+      //     //         "id": "IT",
+      //     //         "customData": "1957"
+      //     //       }, {
+      //     //         "title": "France",
+      //     //         "id": "FR",
+      //     //         "customData": "1957"
+      //     //       }, {
+      //     //         "title": "Spain",
+      //     //         "id": "ES",
+      //     //         "customData": "1986"
+      //     //       }, {
+      //     //         "title": "Greece",
+      //     //         "id": "GR",
+      //     //         "customData": "1981"
+      //     //       }, {
+      //     //         "title": "Germany",
+      //     //         "id": "DE",
+      //     //         "customData": "1957"
+      //     //       }, {
+      //     //         "title": "Belgium",
+      //     //         "id": "BE",
+      //     //         "customData": "1957"
+      //     //       }, {
+      //     //         "title": "Luxembourg",
+      //     //         "id": "LU",
+      //     //         "customData": "1957"
+      //     //       }, {
+      //     //         "title": "Netherlands",
+      //     //         "id": "NL",
+      //     //         "customData": "1957"
+      //     //       }, {
+      //     //         "title": "Portugal",
+      //     //         "id": "PT",
+      //     //         "customData": "1986"
+      //     //       }
+      //     //     ]
+      //     //   },
+      //     //   {
+      //     //     "name": "Joined at 2004",
+      //     //     "color": chart.colors.getIndex(1),
+      //     //     "data": [
+      //     //       {
+      //     //         "title": "Lithuania",
+      //     //         "id": "LT",
+      //     //         "color": chart.colors.getIndex(1),
+      //     //         "customData": "2004",
+      //     //         "groupId": "2004"
+      //     //       }, {
+      //     //         "title": "Latvia",
+      //     //         "id": "LV",
+      //     //         "color": chart.colors.getIndex(1),
+      //     //         "customData": "2004",
+      //     //         "groupId": "2004"
+      //     //       }, {
+      //     //         "title": "Czech Republic ",
+      //     //         "id": "CZ",
+      //     //         "color": chart.colors.getIndex(1),
+      //     //         "customData": "2004",
+      //     //         "groupId": "2004"
+      //     //       }, {
+      //     //         "title": "Slovakia",
+      //     //         "id": "SK",
+      //     //         "color": chart.colors.getIndex(1),
+      //     //         "customData": "2004",
+      //     //         "groupId": "2004"
+      //     //       }, {
+      //     //         "title": "Slovenia",
+      //     //         "id": "SI",
+      //     //         "color": chart.colors.getIndex(1),
+      //     //         "customData": "2004",
+      //     //         "groupId": "2004"
+      //     //       }, {
+      //     //         "title": "Estonia",
+      //     //         "id": "EE",
+      //     //         "color": chart.colors.getIndex(1),
+      //     //         "customData": "2004",
+      //     //         "groupId": "2004"
+      //     //       }, {
+      //     //         "title": "Hungary",
+      //     //         "id": "HU",
+      //     //         "color": chart.colors.getIndex(1),
+      //     //         "customData": "2004",
+      //     //         "groupId": "2004"
+      //     //       }, {
+      //     //         "title": "Cyprus",
+      //     //         "id": "CY",
+      //     //         "color": chart.colors.getIndex(1),
+      //     //         "customData": "2004",
+      //     //         "groupId": "2004"
+      //     //       }, {
+      //     //         "title": "Malta",
+      //     //         "id": "MT",
+      //     //         "color": chart.colors.getIndex(1),
+      //     //         "customData": "2004",
+      //     //         "groupId": "2004"
+      //     //       }, {
+      //     //         "title": "Poland",
+      //     //         "id": "PL",
+      //     //         "color": chart.colors.getIndex(1),
+      //     //         "customData": "2004",
+      //     //         "groupId": "2004"
+      //     //       }
+      //     //     ]
+      //     //   },
+      //     //   {
+      //     //     "name": "Joined at 2007",
+      //     //     "color": chart.colors.getIndex(3),
+      //     //     "data": [
+      //     //       {
+      //     //         "title": "Romania",
+      //     //         "id": "RO",
+      //     //         "customData": "2007"
+      //     //       }, {
+      //     //         "title": "Bulgaria",
+      //     //         "id": "BG",
+      //     //         "customData": "2007"
+      //     //       }
+      //     //     ]
+      //     //   },
+      //     //   {
+      //     //     "name": "Joined at 2013",
+      //     //     "color": chart.colors.getIndex(4),
+      //     //     "data": [
+      //     //       {
+      //     //         "title": "Croatia",
+      //     //         "id": "NA",
+      //     //         "customData": "2013"
+      //     //       },
+      //     //       {
+      //     //         "title": "USA",
+      //     //         "id": "US",
+      //     //         "customData": "2013"
+      //     //       }
+      //     //     ]
+      //     //   }
+      //     // ];
+
+          
+
+      //     // Create a series for each group, and populate the above array
+      //     groupData.forEach(function(group) {
+      //       var series = chart.series.push(new am4maps.MapPolygonSeries());
+      //       series.name = group.name;
+      //       series.useGeodata = true;
+      //       var includedCountries = [];
+      //       // includedCountries.push(group.id);
+      //       // excludedCountries.push(group.id);
+      //       group.data.forEach(function(country) {
+      //         includedCountries.push(country.id);
+      //         excludedCountries.push(country.id);
+      //       });
+      //       series.include = includedCountries;
+
+      //       series.fill = am4core.color(group.color);
+
+      //       // By creating a hover state and setting setStateOnChildren to true, when we
+      //       // hover over the series itself, it will trigger the hover SpriteState of all
+      //       // its countries (provided those countries have a hover SpriteState, too!).
+      //       series.setStateOnChildren = true;
+      //       series.calculateVisualCenter = true;
+
+      //       // Country shape properties & behaviors
+      //       var mapPolygonTemplate = series.mapPolygons.template;
+      //       // Instead of our custom title, we could also use {name} which comes from geodata  
+      //       mapPolygonTemplate.fill = am4core.color(group.color);
+      //       mapPolygonTemplate.fillOpacity = 0.8;
+      //       mapPolygonTemplate.nonScalingStroke = true;
+      //       mapPolygonTemplate.tooltipPosition = "fixed"
+
+      //       mapPolygonTemplate.events.on("over", function(event) {
+      //         series.mapPolygons.each(function(mapPolygon) {
+      //           mapPolygon.isHover = true;
+      //         })
+      //         event.target.isHover = false;
+      //         event.target.isHover = true;
+              
+      //       })
+
+      //       mapPolygonTemplate.events.on("out", function(event) {
+      //         series.mapPolygons.each(function(mapPolygon) {
+      //           mapPolygon.isHover = false;
+      //         })
+      //       })
+
+      //       mapPolygonTemplate.events.on("hit", function(event) {
+      //         sponsorCenterInfo = event.target.dataItem.dataContext.sponsorInfo
+      //         countryName = event.target.dataItem.dataContext.name;
+      //         console.log(sponsorCenterInfo)
+      //         updateTable(countryName, sponsorCenterInfo)
+      //       });
+
+      //       // States  
+      //       var hoverState = mapPolygonTemplate.states.create("hover");
+      //       hoverState.properties.fill = am4core.color("#CC0000");
+
+      //       // Tooltip
+      //       mapPolygonTemplate.tooltipText = "{name}"; // enables tooltip
+      //       // series.tooltip.getFillFromObject = false; // prevents default colorization, which would make all tooltips red on hover
+      //       // series.tooltip.background.fill = am4core.color(group.color);
+
+      //       // MapPolygonSeries will mutate the data assigned to it, 
+      //       // we make and provide a copy of the original data array to leave it untouched.
+      //       // (This method of copying works only for simple objects, e.g. it will not work
+      //       //  as predictably for deep copying custom Classes.)
+      //       series.data = JSON.parse(JSON.stringify(group.data));
+      //     });
+
+      //     // The rest of the world.
+      //     var worldSeries = chart.series.push(new am4maps.MapPolygonSeries());
+      //     var worldSeriesName = "world";
+      //     worldSeries.name = worldSeriesName;
+      //     worldSeries.useGeodata = true;
+      //     worldSeries.exclude = excludedCountries;
+      //     worldSeries.fillOpacity = 0.8;
+      //     worldSeries.hiddenInLegend = true;
+      //     worldSeries.mapPolygons.template.nonScalingStroke = true;
+
+
+      //   });  // end am4core.ready()
+      // }
+
+
+
+      // function updateTable(country, sponsorCenterInfo){
+
+      //   var title = document.getElementById("sponsorTitle");
+      //   title.innerHTML = country + " Sponsors";
+
+
+      //   var tableRef = document.getElementById("sponsorList");
+      //   tableRef.innerHTML = "";
+
+
+      //   Object.keys(sponsorCenterInfo).forEach(function(key) {
+      //     console.log(key, sponsorCenterInfo[key])
+
+      //     center = key;
+      //     sponsors = sponsorCenterInfo[key]
+
+      //     var centerTitle = document.createElement("H3");
+      //     centerTitle.setAttribute('style', 'text-align: center');
+      //     centerTitle.innerHTML = center;
+      //     tableRef.appendChild(centerTitle)
+
+      //     var table = document.createElement("TABLE");
+      //     table.setAttribute('class', 'table table-bordered');
+      //     tableRef.appendChild(table)
+
+      //     for(var i = 0; i < sponsors.length; i+=6){
+      //       // Insert a row at the end of the table
+      //       var newRow = table.insertRow(-1);
+
+      //       // Insert a cell in the row at index 0
+      //       var newCell1 = newRow.insertCell(0);
+      //       var newCell2 = newRow.insertCell(1);
+      //       var newCell3 = newRow.insertCell(2);
+      //       var newCell4 = newRow.insertCell(3);
+      //       var newCell5 = newRow.insertCell(4);
+      //       var newCell6 = newRow.insertCell(5);
+
+      //       // Append a text node to the cell
+
+
+
+      //       if(sponsors[i] == null){
+      //         var newText1 = document.createTextNode("");
+      //       }
+      //       else{
+      //         var newText1 = document.createTextNode(sponsors[i]);
+      //       }
+
+      //       if(sponsors[i+1] == null){
+      //         var newText2 = document.createTextNode("");
+      //       }
+      //       else{
+      //         var newText2 = document.createTextNode(sponsors[i+1]);
+      //       }
+
+      //       if(sponsors[i+2] == null){
+      //         var newText3 = document.createTextNode("");
+      //       }
+      //       else{
+      //         var newText3 = document.createTextNode(sponsors[i+2]);
+      //       }
+
+      //       if(sponsors[i+3] == null){
+      //         var newText4 = document.createTextNode("");
+      //       }
+      //       else{
+      //         var newText4 = document.createTextNode(sponsors[i+3]);
+      //       }
+
+      //       if(sponsors[i+4] == null){
+      //         var newText5 = document.createTextNode("");
+      //       }
+      //       else{
+      //         var newText5 = document.createTextNode(sponsors[i+4]);
+      //       }
+
+      //       if(sponsors[i+5] == null){
+      //         var newText6 = document.createTextNode("");
+      //       }
+      //       else{
+      //         var newText6 = document.createTextNode(sponsors[i+5]);
+      //       }
+
+      //       newCell1.appendChild(newText1);
+      //       newCell2.appendChild(newText2);
+      //       newCell3.appendChild(newText3);
+      //       newCell4.appendChild(newText4);
+      //       newCell5.appendChild(newText5);
+      //       newCell6.appendChild(newText6);
+      //     }
+
+
+
+      //   });
+
+
+        
+
+
+        
+      // }
+      
+    </script>
+    
+  </body>
+</html>
