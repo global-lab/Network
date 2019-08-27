@@ -74,9 +74,45 @@
     <script>
 
       projectCenters = {
-        "Switzerland": [46.8182, 8.2275],
-        "United States": [37.0902, -95.7129],
-        "China": [35.8617, 104.1954]
+        "Melbourne, Australia": [-37.8136, 144.9631],
+        "London, England": [51.5074, -0.1278],
+        "Venice, Italy": [45.4408, 12.3155],
+        "Worcester Community Project Center": [41.2626, -70.8023],
+        "Hong Kong, China": [22.3193, 114.1694],
+        "Washington, DC": [38.9072, -77.0369],
+        "Namibia": [-22.9576, 18.4904],
+        "Cape Town, South Africa": [-33.9249, 18.4241],
+        "San Jose, Costa Rica": [9.9281, -84.0907],
+        "Copenhagen, Denmark": [55.6761, 12.5683],
+        "Bangkok, Thailand": [13.7563, 100.5018],
+        "Costa Rica": [9.7489, -83.7534],
+        "New Zealand": [-40.9006, 174.8860],
+        "Sante Fe, New Mexico": [35.6870, -105.9378],
+        "Boston, Massachusetts": [42.3601, -71.0589],
+        "Worcester, MA": [42.2626, -71.8023],
+        "Puerto Rico": [18.2208, -66.5901],
+        "Nantucket, Massachusetts": [41.2835, -70.0995],
+        "Morocco": [31.7917, -7.0926],
+        "Zurich, Switzerland": [47.3769, 8.5417],
+        "Windhoek, Namibia": [-22.5609, 17.0658],
+        "San Juan, Puerto Rico": [18.4655, -66.1057],
+        "India": [20.5937, 78.9629],
+        "Bar Harbor, Maine": [44.3876, -68.2039],
+        "Albania": [41.1533, 20.1683],
+        "Russia": [61.5240, 105.3188],
+        "Hangzhou, China": [30.2741, 120.1551],
+        "Panama City, Panama": [8.9824, -79.5199],
+        "Microsoft Corporation": [0, 0],
+        "Ifrane, Morocco": [33.5228, -5.1110],
+        "WORC / Worcester Community Project Center": [43.2626, -72.8023],
+        "Wuhan, China": [30.5928, 114.3055],
+        "Japan (Multiple Cities)": [36.2048, 138.2529],
+        "Lille, France": [50.6292, 3.0573],
+        "Beijing, China": [39.9042, 116.4074],
+        "Darmstadt, Germany": [49.8728, 8.6512],
+        "Pioneer Valley Econ Dev": [10, 10],
+        "Shanghai, China": [31.2304, 121.4737],
+        "N/A": [80, 80]
       }
       
 
@@ -84,7 +120,31 @@
 
       var popup = L.popup();
 
-      createMap();
+      
+
+      sponsorInfo = {};
+
+
+      d3.csv("allCleaned.csv", function(data) {
+        console.log(data);
+        
+        data.forEach(function(info){
+
+          if(sponsorInfo[info.Center]){
+            sponsorInfo[info.Center][0].data.push({"sponsor": info.Sponsor, "center": info.Center, "date": info.Date});
+          }
+          else{
+            sponsorInfo[info.Center] = [{"data": [{"sponsor": info.Sponsor, "center": info.Center, "date": info.Date}], "location": projectCenters[info.Center]}];
+          }
+
+          
+        })
+
+        console.log(sponsorInfo)
+
+        createMap();
+        
+      });
 
 
 
@@ -100,10 +160,10 @@
 
 
 
-        Object.keys(projectCenters).forEach(function(key) {
-          console.log(key, projectCenters[key]);
+        Object.keys(sponsorInfo).forEach(function(key) {
+          // console.log(key, sponsorInfo[key]);
 
-          var marker = L.marker(projectCenters[key]).addTo(mymap).bindPopup(key);
+          var marker = L.marker(sponsorInfo[key][0].location).addTo(mymap).bindPopup(key);
 
           marker.on('mouseover', showPopup);
           marker.on('mouseout', hidePopup);
