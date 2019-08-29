@@ -27,14 +27,26 @@
         position: center;
       }
 
-      .ticks {
-        font-size: 10px;
+     /* .ticks {
+        font-size: 20px;
+        fill: #fff;
+        stroke: #fff;
+
+      }*/
+      .ticks line{
+        stroke: white;
+      }
+
+      .ticks text{
+        fill: white;
+        font-size: 20px;
       }
 
       .track,
       .track-inset,
       .track-overlay {
         stroke-linecap: round;
+
       }
 
       .track {
@@ -53,6 +65,7 @@
         stroke-width: 50px;
         stroke: transparent;
         cursor: crosshair;
+
       }
 
       .handle {
