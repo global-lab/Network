@@ -27,6 +27,41 @@
         position: center;
       }
 
+      .ticks {
+        font-size: 10px;
+      }
+
+      .track,
+      .track-inset,
+      .track-overlay {
+        stroke-linecap: round;
+      }
+
+      .track {
+        stroke: #000;
+        stroke-opacity: 0.3;
+        stroke-width: 10px;
+      }
+
+      .track-inset {
+        stroke: #dcdcdc;
+        stroke-width: 8px;
+      }
+
+      .track-overlay {
+        pointer-events: stroke;
+        stroke-width: 50px;
+        stroke: transparent;
+        cursor: crosshair;
+      }
+
+      .handle {
+        fill: #fff;
+        stroke: #000;
+        stroke-opacity: 0.5;
+        stroke-width: 1.25px;
+      }
+
     </style>
   
   </head>
@@ -44,20 +79,13 @@
       </div>
     </nav>
 
-    <div class="col-sm-2" id="chartdiv">
-      
-    </div>
     <div class="col-sm-8" id="chartdiv">
       <div id="mapid"></div>
     </div>
-    <div class="col-sm-2" id="chartdiv">
+    <div class="col-sm-4" id="timeline">
       
     </div>
     
-
-<!--     <div class="col-sm-12" id="chartdiv">
-      
-    </div>
 
     <br>
     <br>
@@ -68,7 +96,8 @@
 
     <div class="col-sm-12" id="sponsorList">
 
-    </div> -->
+    </div>
+    
     
 
     <script>
@@ -77,7 +106,9 @@
         "Melbourne, Australia": [-37.8136, 144.9631],
         "London, England": [51.5074, -0.1278],
         "Venice, Italy": [45.4408, 12.3155],
+
         "Worcester Community Project Center": [41.2626, -70.8023],
+
         "Hong Kong, China": [22.3193, 114.1694],
         "Washington, DC": [38.9072, -77.0369],
         "Namibia": [-22.9576, 18.4904],
@@ -102,15 +133,21 @@
         "Russia": [61.5240, 105.3188],
         "Hangzhou, China": [30.2741, 120.1551],
         "Panama City, Panama": [8.9824, -79.5199],
+
         "Microsoft Corporation": [0, 0],
+
         "Ifrane, Morocco": [33.5228, -5.1110],
+
         "WORC / Worcester Community Project Center": [43.2626, -72.8023],
+
         "Wuhan, China": [30.5928, 114.3055],
         "Japan (Multiple Cities)": [36.2048, 138.2529],
         "Lille, France": [50.6292, 3.0573],
         "Beijing, China": [39.9042, 116.4074],
         "Darmstadt, Germany": [49.8728, 8.6512],
+
         "Pioneer Valley Econ Dev": [10, 10],
+
         "Shanghai, China": [31.2304, 121.4737],
         "N/A": [80, 80]
       }
@@ -119,6 +156,10 @@
       var mymap = L.map('mapid').setView([30, 10], 2);
 
       var popup = L.popup();
+
+
+    
+
 
       
 
@@ -160,6 +201,7 @@
 
 
 
+
         Object.keys(sponsorInfo).forEach(function(key) {
           // console.log(key, sponsorInfo[key]);
 
@@ -167,126 +209,131 @@
 
           marker.on('mouseover', showPopup);
           marker.on('mouseout', hidePopup);
-          marker.on('click', showPopup);
+          marker.on('click', function clickedPopup(e,){
+            this.openPopup();
+            updateTable(key, sponsorInfo[key][0].data);
+          });
          
         })
 
 
       }
 
-      function showPopup(e){
+      function showPopup(){
         this.openPopup();
       }
 
-      function hidePopup(e){
+      function hidePopup(){
         this.closePopup();
       }
+
+      
 
 
 
       function updateTable(country, sponsorCenterInfo){
 
         var title = document.getElementById("sponsorTitle");
-        title.innerHTML = country + " Sponsors";
+        title.innerHTML = "Sponsors for projects in " + country;
 
 
         var tableRef = document.getElementById("sponsorList");
         tableRef.innerHTML = "";
 
+        console.log(sponsorCenterInfo)
 
-        Object.keys(sponsorCenterInfo).forEach(function(key) {
-          console.log(key, sponsorCenterInfo[key])
+        var centerTitle = document.createElement("H3");
+        centerTitle.setAttribute('style', 'text-align: center');
+        centerTitle.innerHTML = country;
+        tableRef.appendChild(centerTitle)
 
-          center = key;
-          sponsors = sponsorCenterInfo[key]
+        var table = document.createElement("TABLE");
+        table.setAttribute('class', 'table table-bordered');
+        tableRef.appendChild(table)
 
-          var centerTitle = document.createElement("H3");
-          centerTitle.setAttribute('style', 'text-align: center');
-          centerTitle.innerHTML = center;
-          tableRef.appendChild(centerTitle)
+        sponsors = []
 
-          var table = document.createElement("TABLE");
-          table.setAttribute('class', 'table table-bordered');
-          tableRef.appendChild(table)
+        sponsorCenterInfo.forEach(function(data) {
 
-          for(var i = 0; i < sponsors.length; i+=6){
-            // Insert a row at the end of the table
-            var newRow = table.insertRow(-1);
-
-            // Insert a cell in the row at index 0
-            var newCell1 = newRow.insertCell(0);
-            var newCell2 = newRow.insertCell(1);
-            var newCell3 = newRow.insertCell(2);
-            var newCell4 = newRow.insertCell(3);
-            var newCell5 = newRow.insertCell(4);
-            var newCell6 = newRow.insertCell(5);
-
-            // Append a text node to the cell
-
-
-
-            if(sponsors[i] == null){
-              var newText1 = document.createTextNode("");
-            }
-            else{
-              var newText1 = document.createTextNode(sponsors[i]);
-            }
-
-            if(sponsors[i+1] == null){
-              var newText2 = document.createTextNode("");
-            }
-            else{
-              var newText2 = document.createTextNode(sponsors[i+1]);
-            }
-
-            if(sponsors[i+2] == null){
-              var newText3 = document.createTextNode("");
-            }
-            else{
-              var newText3 = document.createTextNode(sponsors[i+2]);
-            }
-
-            if(sponsors[i+3] == null){
-              var newText4 = document.createTextNode("");
-            }
-            else{
-              var newText4 = document.createTextNode(sponsors[i+3]);
-            }
-
-            if(sponsors[i+4] == null){
-              var newText5 = document.createTextNode("");
-            }
-            else{
-              var newText5 = document.createTextNode(sponsors[i+4]);
-            }
-
-            if(sponsors[i+5] == null){
-              var newText6 = document.createTextNode("");
-            }
-            else{
-              var newText6 = document.createTextNode(sponsors[i+5]);
-            }
-
-            newCell1.appendChild(newText1);
-            newCell2.appendChild(newText2);
-            newCell3.appendChild(newText3);
-            newCell4.appendChild(newText4);
-            newCell5.appendChild(newText5);
-            newCell6.appendChild(newText6);
-          }
-
-
-
+          center = data.center;
+          sponsors.push(data.sponsor);
         });
 
+        sponsors.sort();
+        sponsors = [...new Set(sponsors)];
 
-        
 
+        for(var i = 0; i < sponsors.length; i+=6){
+          // Insert a row at the end of the table
+          var newRow = table.insertRow(-1);
+
+          // Insert a cell in the row at index 0
+          var newCell1 = newRow.insertCell(0);
+          var newCell2 = newRow.insertCell(1);
+          var newCell3 = newRow.insertCell(2);
+          var newCell4 = newRow.insertCell(3);
+          var newCell5 = newRow.insertCell(4);
+          var newCell6 = newRow.insertCell(5);
+
+          // Append a text node to the cell
+
+
+
+          if(sponsors[i] == null){
+            var newText1 = document.createTextNode("");
+          }
+          else{
+            var newText1 = document.createTextNode(sponsors[i]);
+          }
+
+          if(sponsors[i+1] == null){
+            var newText2 = document.createTextNode("");
+          }
+          else{
+            var newText2 = document.createTextNode(sponsors[i+1]);
+          }
+
+          if(sponsors[i+2] == null){
+            var newText3 = document.createTextNode("");
+          }
+          else{
+            var newText3 = document.createTextNode(sponsors[i+2]);
+          }
+
+          if(sponsors[i+3] == null){
+            var newText4 = document.createTextNode("");
+          }
+          else{
+            var newText4 = document.createTextNode(sponsors[i+3]);
+          }
+
+          if(sponsors[i+4] == null){
+            var newText5 = document.createTextNode("");
+          }
+          else{
+            var newText5 = document.createTextNode(sponsors[i+4]);
+          }
+
+          if(sponsors[i+5] == null){
+            var newText6 = document.createTextNode("");
+          }
+          else{
+            var newText6 = document.createTextNode(sponsors[i+5]);
+          }
+
+          newCell1.appendChild(newText1);
+          newCell2.appendChild(newText2);
+          newCell3.appendChild(newText3);
+          newCell4.appendChild(newText4);
+          newCell5.appendChild(newText5);
+          newCell6.appendChild(newText6);
+        }
 
         
       }
       
     </script>
+    <script src="slider.js"></script>
     
   </body>
 </html>
