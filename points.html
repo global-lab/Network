@@ -39,7 +39,7 @@
 
       .ticks text{
         fill: white;
-        font-size: 20px;
+        font-size: 10px;
       }
 
       .track,
@@ -112,7 +112,7 @@
     </div>
     
     
-
+    <script src="lodash.js"></script>
     <script>
 
       projectCenters = {
@@ -172,11 +172,12 @@
 
 
     
-
+      var currentCountry;
 
       
 
-      sponsorInfo = {};
+      var sponsorInfo = {};
+      var filteredInfo = {};
 
 
       d3.csv("allCleaned.csv", function(data) {
@@ -195,6 +196,8 @@
         })
 
         console.log(sponsorInfo)
+
+        filteredInfo = _.cloneDeep(sponsorInfo);
 
         createMap();
         
@@ -215,16 +218,17 @@
 
 
 
-        Object.keys(sponsorInfo).forEach(function(key) {
-          // console.log(key, sponsorInfo[key]);
+        Object.keys(filteredInfo).forEach(function(key) {
+          // console.log(key, filteredInfo[key]);
 
-          var marker = L.marker(sponsorInfo[key][0].location).addTo(mymap).bindPopup(key);
+          var marker = L.marker(filteredInfo[key][0].location).addTo(mymap).bindPopup(key);
 
           marker.on('mouseover', showPopup);
           marker.on('mouseout', hidePopup);
           marker.on('click', function clickedPopup(e,){
             this.openPopup();
-            updateTable(key, sponsorInfo[key][0].data);
+            currentCountry = key
+            updateTable(key, filteredInfo[key][0].data);
           });
          
         })
