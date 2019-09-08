@@ -146,8 +146,8 @@ function update2(h) {
 
 
 function updateData(){
-    console.log(beforeDate)
-    console.log(afterDate)
+    // console.log(beforeDate)
+    // console.log(afterDate)
 
     filteredInfo = _.cloneDeep(sponsorInfo);
 
@@ -173,8 +173,8 @@ function updateData(){
 
     })
 
-    console.log(sponsorInfo)
-    console.log(filteredInfo)
+    // console.log(sponsorInfo)
+    // console.log(filteredInfo)
 
     updateTable(currentCountry, filteredInfo[currentCountry][0].data);
 }
