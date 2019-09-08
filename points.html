@@ -180,16 +180,16 @@
       var filteredInfo = {};
 
 
-      d3.csv("allCleaned.csv", function(data) {
+      d3.csv("iqp_legacyfiles.csv", function(data) {
         console.log(data);
         
         data.forEach(function(info){
 
-          if(sponsorInfo[info.Center]){
-            sponsorInfo[info.Center][0].data.push({"sponsor": info.Sponsor, "center": info.Center, "date": info.Date});
+          if(sponsorInfo[info.ProjectCenter]){
+            sponsorInfo[info.ProjectCenter][0].data.push({"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.Date});
           }
           else{
-            sponsorInfo[info.Center] = [{"data": [{"sponsor": info.Sponsor, "center": info.Center, "date": info.Date}], "location": projectCenters[info.Center]}];
+            sponsorInfo[info.ProjectCenter] = [{"data": [{"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.Date}], "location": projectCenters[info.ProjectCenter]}];
           }
 
           
