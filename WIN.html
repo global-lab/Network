@@ -12,6 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 
+
     <style>
 
       /*#chartdiv {
@@ -88,8 +89,8 @@
         <ul class="nav navbar-nav">
           <li><a href="index.html">Sponsors</a></li>
           <li><a href="climateChange.html">Climate Change</a></li>
-          <li class="active"><a href="points.html">points</a></li>
-          <li><a href="WIN.html">WIN</a></li>
+          <li><a href="points.html">points</a></li>
+          <li class="active"><a href="WIN.html">WIN</a></li>
         </ul>
       </div>
     </nav>
@@ -135,52 +136,24 @@
 
 
         "": [70, 0],
-        "Acadia National Park, Maine Project Center - IQP": [44.3386, -68.2733],
-        "Asuncion, Paraguay Project Center - IQP": [-25.2637, -57.5759],
-        "Bangkok, Thailand Project Center - IQP": [13.7563, 100.5018],
-        "Beijing, China Project Center - IQP": [39.9042, 116.4074],
-        "Berlin, Germany Project Center - IQP": [52.5200, 13.4050],
-        "Boston, Massachusetts Project Center - IQP": [42.3601, -71.0589],
+        "On-Campus": [70,0],
+        "Asuncion, Paraguay": [-25.2637, -57.5759],
+        "Bangkok, Thailand": [13.7563, 100.5018],
+        "Boston, Massachusetts": [42.3601, -71.0589],
         "British Virgin Islands": [18.4207, -64.6400],
         "Campinas, Brazil": [-22.9329, -47.0738],
-        "Cape Town, South Africa Project Center - IQP": [-33.9249, 18.4241],
-        "Copenhagen, Denmark Project Center - IQP": [55.6761, 12.5683],
-        "Cuenca, Ecuador Project Center - IQP": [-2.9001, -79.0059],
-        "Darmstadt, Germany Project Center - IQP": [49.8728, 8.6512],
-        "Glacier National Park, Montana Project Center - IQP": [48.7596, -113.7870],
-        "Groveland, California": [37.8389, -120.2308],
-        "Hangzhou, China Project Center - IQP": [30.2741, 120.1551],
-        "Hong Kong, China Project Center - IQP": [22.3193, 114.1694],
-        "Israel Project Center (Eilat) - IQP": [29.5577, 34.9519],
-        "Japan Project Center (Kyoto) - IQP": [35.0116, 135.7681],
-        "London, England Project Center - IQP": [51.5074, -0.1278],
-        "Mandi, India Project Center - IQP": [31.5892, 76.9182],
-        "Melbourne, Australia Project Center - IQP": [-37.8136, 144.9631],
-        "Monteverde, Costa Rica Project Center - IQP": [10.2750, -84.8255],
-        "Montreal, Canada": [45.5017, -73.5673],
-        "Moscow, Russia Project Center - IQP": [55.7558, 37.6173],
-        "Nantucket, Massachusetts Project Center - IQP": [41.2835, -70.0995],
-        "Panama City, Panama Project Center - IQP": [8.9824, -79.5199],
-        "Pioneer Valley, Massachusetts Project Center - IQP": [42.2914, -72.5967],
-        "Rabat, Morocco Project Center - IQP": [33.9716, -6.8498],
-        "Reykjavik, Iceland Project Center - IQP": [64.1466, -21.9426],
-        "San Jose, Costa Rica Project Center - IQP": [9.9281, -84.0907],
-        "San Juan, Puerto Rico Project Center - IQP": [18.4655, -66.1057],
-        "Santa Fe, New Mexico Project Center - IQP": [35.6870, -105.9378],
-        "Silicon Valley, California": [37.3875, -122.0575],
-        "Thessaloniki, Greece Project Center - IQP": [40.6401, 22.9444],
-        "Tirana, Albania Project Center - IQP": [41.3275, 19.8187],
-        "Tortola, British Virgin Islands": [18.4335, -64.6333],
-        "Venice, Italy Project Center - IQP": [45.4408, 12.3155],
-        "Washington, DC Project Center - IQP": [38.9072, -77.0369],
-        "Water Resource Outreach Center (Massachusetts) - IQP": [70, 10],
-        "Wellington, New Zealand Project Center - IQP": [-41.2865, 174.7762],
-        "Windhoek, Namibia Project Center - IQP": [-22.5609, 17.0658],
+        "Cape Town, South Africa": [-33.9249, 18.4241],
+        "Cuenca, Ecuador": [-2.9001, -79.0059],
+        "London, England": [51.5074, -0.1278],
+        "Mandi, India": [31.5892, 76.9182],
+        "Melbourne, Australia": [-37.8136, 144.9631],
+        "Rabat, Morocco": [33.9716, -6.8498],
+        "San Jose, Costa Rica": [9.9281, -84.0907],
+        "Thessaloniki, Greece": [40.6401, 22.9444],
+        "Tirana, Albania": [41.3275, 19.8187],
         "Worcester Community Project Center (Massachusetts) - IQP": [70, 20],
-        "Worcester, England Project Center - IQP": [52.1936, -2.2216],
-        "Worcester, MA": [42.2626, -71.8023],
-        "Yerevan, Armenia Project Center - IQP": [40.1872, 44.5152],
-        "Zurich, Switzerland Project Center - IQP": [47.3769, 8.5417]
+        "Yerevan, Armenia": [40.1872, 44.5152],
+        "Zurich, Switzerland": [47.3769, 8.5417]
       }
       
 
@@ -199,16 +172,16 @@
 
 
 
-      d3.csv("iqp_legacyfiles.csv", function(data) {
+      d3.csv("WINProjects.csv", function(data) {
         console.log(data);
         
         data.forEach(function(info){
 
           if(sponsorInfo[info.ProjectCenter]){
-            sponsorInfo[info.ProjectCenter][0].data.push({"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.DateCreated});
+            sponsorInfo[info.ProjectCenter][0].data.push({"title": info.Title, "center": info.ProjectCenter, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link});
           }
           else{
-            sponsorInfo[info.ProjectCenter] = [{"data": [{"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.DateCreated}], "location": projectCenters[info.ProjectCenter]}];
+            sponsorInfo[info.ProjectCenter] = [{"data": [{"title": info.Title, "center": info.ProjectCenter, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link}], "location": projectCenters[info.ProjectCenter]}];
           }
 
           
@@ -270,16 +243,16 @@
 
 
 
-      function updateTable(country, sponsorCenterInfo){
+      function updateTable(country, WINCenterInfo){
 
         var title = document.getElementById("sponsorTitle");
-        title.innerHTML = "Sponsors for projects in " + country;
+        title.innerHTML = "WIN projects in " + country;
 
 
         var tableRef = document.getElementById("sponsorList");
         tableRef.innerHTML = "";
 
-        console.log(sponsorCenterInfo)
+        console.log(WINCenterInfo)
 
         var centerTitle = document.createElement("H3");
         centerTitle.setAttribute('style', 'text-align: center');
@@ -287,28 +260,26 @@
         tableRef.appendChild(centerTitle)
 
         var table = document.createElement("TABLE");
-        table.setAttribute('class', 'table table-bordered');
+        table.setAttribute('class', 'table');
         tableRef.appendChild(table)
 
-        sponsors = []
 
-        sponsorCenterInfo.forEach(function(data) {
+        var header = table.createTHead();
+        var row = header.insertRow(0);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        cell1.innerHTML = "<b>Title</b>";
+        cell2.innerHTML = "<b>Sponsor</b>";
+        cell3.innerHTML = "<b>Link</b>";
 
-          center = data.center;
-          sponsors.push(data.sponsor);
-        });
 
-        sponsors.sort();
-        sponsors = [...new Set(sponsors)];
+        console.log(WINCenterInfo)
 
 
-        var i = 0
 
-        if(sponsors[0] == ""){
-          i = 1
-        }
-
-        for(i; i < sponsors.length; i+=6){
+        for(var i = 0; i < WINCenterInfo.length; i+=1){
+          
           // Insert a row at the end of the table
           var newRow = table.insertRow(-1);
 
@@ -316,65 +287,43 @@
           var newCell1 = newRow.insertCell(0);
           var newCell2 = newRow.insertCell(1);
           var newCell3 = newRow.insertCell(2);
-          var newCell4 = newRow.insertCell(3);
-          var newCell5 = newRow.insertCell(4);
-          var newCell6 = newRow.insertCell(5);
 
           // Append a text node to the cell
 
+          var aTag = document.createElement("A");
 
 
-          if(sponsors[i] == null){
+          if(WINCenterInfo[i].title == null){
             var newText1 = document.createTextNode("");
           }
           else{
-            var newText1 = document.createTextNode(sponsors[i]);
+            var newText1 = document.createTextNode(WINCenterInfo[i].title);
           }
 
-          if(sponsors[i+1] == null){
+          if(WINCenterInfo[i].sponsor == null){
             var newText2 = document.createTextNode("");
           }
           else{
-            var newText2 = document.createTextNode(sponsors[i+1]);
+            var newText2 = document.createTextNode(WINCenterInfo[i].sponsor);
           }
 
-          if(sponsors[i+2] == null){
+          if(WINCenterInfo[i].URL == null){
             var newText3 = document.createTextNode("");
           }
           else{
-            var newText3 = document.createTextNode(sponsors[i+2]);
+            var newText3 = document.createTextNode(WINCenterInfo[i].URL);
+
+            aTag.setAttribute('href', WINCenterInfo[i].URL);
+            aTag.setAttribute('target', "_blank");
           }
 
-          if(sponsors[i+3] == null){
-            var newText4 = document.createTextNode("");
-          }
-          else{
-            var newText4 = document.createTextNode(sponsors[i+3]);
-          }
-
-          if(sponsors[i+4] == null){
-            var newText5 = document.createTextNode("");
-          }
-          else{
-            var newText5 = document.createTextNode(sponsors[i+4]);
-          }
-
-          if(sponsors[i+5] == null){
-            var newText6 = document.createTextNode("");
-          }
-          else{
-            var newText6 = document.createTextNode(sponsors[i+5]);
-          }
 
           newCell1.appendChild(newText1);
           newCell2.appendChild(newText2);
-          newCell3.appendChild(newText3);
-          newCell4.appendChild(newText4);
-          newCell5.appendChild(newText5);
-          newCell6.appendChild(newText6);
-        }
 
-        
+          aTag.appendChild(newText3);
+          newCell3.appendChild(aTag);
+        }
       }
       
     </script>
