@@ -2,7 +2,7 @@ var formatDateIntoYear = d3.timeFormat("%Y");
 var formatDate = d3.timeFormat("%b %Y");
 var parseDate = d3.timeParse("%m/%d/%y");
 
-var startDate = new Date("2004-01-01"),
+var startDate = new Date("1998-01-01"),
     endDate = new Date("2020-02-01");
 
 var beforeDate = startDate;
@@ -72,8 +72,6 @@ function update(h) {
   
   beforeDate = new Date(formatDate(h))
 
-  console.log(beforeDate)
-
   updateData()
 }
 
@@ -126,7 +124,7 @@ var label2 = slider2.append("text")
     .attr("class", "label")
     .attr("style", "fill: #fff")
     .attr("text-anchor", "middle")
-    .text(formatDate(startDate))
+    .text(formatDate(endDate))
     .attr("transform", "translate(0," + (-25) + ")")
 
 

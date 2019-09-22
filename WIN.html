@@ -88,9 +88,8 @@
         </div>
         <ul class="nav navbar-nav">
           <li><a href="index.html">Sponsors</a></li>
-          <li><a href="climateChange.html">Climate Change</a></li>
-          <li><a href="points.html">points</a></li>
           <li class="active"><a href="WIN.html">WIN</a></li>
+          <li><a href="animation.html">Animation</a></li>
         </ul>
       </div>
     </nav>
@@ -120,22 +119,7 @@
 
       projectCenters = {
 
-        "Worcester Community Project Center": [41.2626, -70.8023],
-        "Namibia": [-22.9576, 18.4904],
-        "Puerto Rico": [18.2208, -66.5901],
-        "Bar Harbor, Maine": [44.3876, -68.2039],
-        "Microsoft Corporation": [0, 0],
-        "Ifrane, Morocco": [33.5228, -5.1110],
-        "WORC / Worcester Community Project Center": [43.2626, -72.8023],
-        "Wuhan, China": [30.5928, 114.3055],
-        "Lille, France": [50.6292, 3.0573],
-        "Pioneer Valley Econ Dev": [10, 10],
-        "Shanghai, China": [31.2304, 121.4737],
-
-
-
-
-        "": [70, 0],
+        "": [42.2744, -71.80874],
         "Acadia National Park, Maine Project Center - IQP": [44.3386, -68.2733],
         "Asuncion, Paraguay Project Center - IQP": [-25.2637, -57.5759],
         "Bangkok, Thailand Project Center - IQP": [13.7563, 100.5018],
@@ -174,10 +158,10 @@
         "Tortola, British Virgin Islands": [18.4335, -64.6333],
         "Venice, Italy Project Center - IQP": [45.4408, 12.3155],
         "Washington, DC Project Center - IQP": [38.9072, -77.0369],
-        "Water Resource Outreach Center (Massachusetts) - IQP": [70, 10],
+        "Water Resource Outreach Center (Massachusetts) - IQP": [42.2625, -71.80188],
         "Wellington, New Zealand Project Center - IQP": [-41.2865, 174.7762],
         "Windhoek, Namibia Project Center - IQP": [-22.5609, 17.0658],
-        "Worcester Community Project Center (Massachusetts) - IQP": [70, 20],
+        "Worcester Community Project Center (Massachusetts) - IQP": [42.25991, -71.80192],
         "Worcester, England Project Center - IQP": [52.1936, -2.2216],
         "Worcester, MA": [42.2626, -71.8023],
         "Yerevan, Armenia Project Center - IQP": [40.1872, 44.5152],
@@ -205,11 +189,31 @@
         
         data.forEach(function(info){
 
-          if(sponsorInfo[info.ProjectCenter_x]){
-            sponsorInfo[info.ProjectCenter_x][0].data.push({"title": info.Title, "center": info.ProjectCenter_x, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link});
+
+          if(info.ProjectCenter_x == "Worcester, MA"){
+            if(sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"]){
+              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated, "URL": info.Link});
+            }
+            else{
+              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated, "URL": info.Link}], "location": projectCenters["Worcester Community Project Center (Massachusetts) - IQP"]}];
+            }
+          }
+          else if(info.ProjectCenter_x == ""){
+            if(sponsorInfo["On Campus - IQP"]){
+              sponsorInfo["On Campus - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated, "URL": info.Link});
+            }
+            else{
+              sponsorInfo["On Campus - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated, "URL": info.Link}], "location": projectCenters[""]}];
+            }
           }
           else{
-            sponsorInfo[info.ProjectCenter_x] = [{"data": [{"title": info.Title, "center": info.ProjectCenter_x, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link}], "location": projectCenters[info.ProjectCenter_x]}];
+
+            if(sponsorInfo[info.ProjectCenter_x]){
+              sponsorInfo[info.ProjectCenter_x][0].data.push({"title": info.Title, "center": info.ProjectCenter_x, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link});
+            }
+            else{
+              sponsorInfo[info.ProjectCenter_x] = [{"data": [{"title": info.Title, "center": info.ProjectCenter_x, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link}], "location": projectCenters[info.ProjectCenter_x]}];
+            }
           }
 
           
@@ -251,6 +255,8 @@
 
           var markerL = new L.FeatureGroup();
           markerL.addLayer(marker)
+
+          mymap.addLayer(markerL)
 
           markerLayers[key] = markerL
          

@@ -47,7 +47,7 @@
     <br>
 
     <div class="col-sm-12">
-      <h1 id="sponsorTitle" style="text-align: center;">Click on a country to find out about past IQPs related to Climate Change</h1>
+      <h1 id="sponsorTitle" style="text-align: center;">Click on a country to find out about past IQP sponsors</h1>
     </div>
 
     <div class="col-sm-12" id="sponsorList">
@@ -101,26 +101,26 @@
       }
 
 
-      climateInfo = {};
+      sponsorInfo = {};
 
 
-      d3.csv("climateChange.csv", function(data) {
+      d3.csv("SponsorInformationUpdated.csv", function(data) {
         console.log(data);
         
         data.forEach(function(info){
 
           code = countryCodes[info.Center]
 
-          if(climateInfo[code]){
-            climateInfo[code].push({"title": info.Title, "center": info.Center, "sponsor": info.Sponsor, "URL": info.URL});
+          if(sponsorInfo[code]){
+            sponsorInfo[code].push({"sponsor": info.Sponsor, "center": info.Center});
           }
           else{
-            climateInfo[code] = [{"title": info.Title, "center": info.Center, "sponsor": info.Sponsor, "URL": info.URL}];
+            sponsorInfo[code] = [{"sponsor": info.Sponsor, "center": info.Center}];
           }
           
         })
 
-        console.log(climateInfo);
+        console.log(sponsorInfo);
 
         createMap()
       });
@@ -170,8 +170,24 @@
           var groupData = [];
           var i = 0
 
-          Object.keys(climateInfo).forEach(function(key) {
-              // console.log(key, climateInfo[key]);
+          Object.keys(sponsorInfo).forEach(function(key) {
+              // console.log(key, sponsorInfo[key]);
+
+              tempData = {}
+
+              sponsorInfo[key].forEach(function(info){
+                // console.log(info.sponsor, info.center)
+
+
+                if(tempData[info.center]){
+                  tempData[info.center].push(info.sponsor);
+                }
+                else{
+                  tempData[info.center] = [info.sponsor];
+                }
+              })
+
+
 
               groupData.push({
                 "name": key,
@@ -179,7 +195,8 @@
                 "data": [
                   {
                     "id": key,
-                    "climateInfo": climateInfo[key]
+                    "sponsorInfo": tempData,
+                    "sponsors": [...new Set(sponsorInfo[key].sponsor)]
                   }
                 ]
               })
@@ -410,10 +427,10 @@
             })
 
             mapPolygonTemplate.events.on("hit", function(event) {
-              climateCenterInfo = event.target.dataItem.dataContext.climateInfo
+              sponsorCenterInfo = event.target.dataItem.dataContext.sponsorInfo
               countryName = event.target.dataItem.dataContext.name;
-              console.log(climateCenterInfo)
-              updateTable(countryName, climateCenterInfo)
+              console.log(sponsorCenterInfo)
+              updateTable(countryName, sponsorCenterInfo)
             });
 
             // States  
@@ -438,15 +455,9 @@
           worldSeries.name = worldSeriesName;
           worldSeries.useGeodata = true;
           worldSeries.exclude = excludedCountries;
-          worldSeries.fillOpacity = 1 ;
+          worldSeries.fillOpacity = 0.8;
           worldSeries.hiddenInLegend = true;
           worldSeries.mapPolygons.template.nonScalingStroke = true;
-          worldSeries.propertyFields.fill = am4core.color("#FFFFFF")
-          worldSeries.stroke = am4core.color("#FFFFFF")
-
-          console.log(worldSeries)
-          
-
 
 
         });  // end am4core.ready()
@@ -454,40 +465,21 @@
 
 
 
-      function updateTable(country, climateCenterInfo){
-
-        // console.log(climateCenterInfo)
+      function updateTable(country, sponsorCenterInfo){
 
         var title = document.getElementById("sponsorTitle");
-        title.innerHTML = "Climate Change Projects in " + country;
+        title.innerHTML = country + " Sponsors";
 
 
         var tableRef = document.getElementById("sponsorList");
         tableRef.innerHTML = "";
 
 
-        centerData = {}
-
-        climateCenterInfo.forEach(function(info){
-
-
-          if(centerData[info.center]){
-            centerData[info.center].push({"title": info.title, "sponsor": info.sponsor, "URL": info.URL});
-          }
-          else{
-            centerData[info.center] = [{"title": info.title, "sponsor": info.sponsor, "URL": info.URL}];
-          }
-        })
-
-
-        console.log(centerData)
-
-
-        Object.keys(centerData).forEach(function(key) {
-          // console.log(key, climateCenterInfo[key])
+        Object.keys(sponsorCenterInfo).forEach(function(key) {
+          console.log(key, sponsorCenterInfo[key])
 
           center = key;
-          IQPs = centerData[key]
+          sponsors = sponsorCenterInfo[key]
 
           var centerTitle = document.createElement("H3");
           centerTitle.setAttribute('style', 'text-align: center');
@@ -495,23 +487,10 @@
           tableRef.appendChild(centerTitle)
 
           var table = document.createElement("TABLE");
-          table.setAttribute('class', 'table');
+          table.setAttribute('class', 'table table-bordered');
           tableRef.appendChild(table)
 
-
-
-          var header = table.createTHead();
-          var row = header.insertRow(0);
-          var cell1 = row.insertCell(0);
-          var cell2 = row.insertCell(1);
-          var cell3 = row.insertCell(2);
-          cell1.innerHTML = "<b>Title</b>";
-          cell2.innerHTML = "<b>Sponsor</b>";
-          cell3.innerHTML = "<b>Link</b>";
-
-          
-
-          for(var i = 0; i < IQPs.length; i+=1){
+          for(var i = 0; i < sponsors.length; i+=6){
             // Insert a row at the end of the table
             var newRow = table.insertRow(-1);
 
@@ -519,43 +498,62 @@
             var newCell1 = newRow.insertCell(0);
             var newCell2 = newRow.insertCell(1);
             var newCell3 = newRow.insertCell(2);
+            var newCell4 = newRow.insertCell(3);
+            var newCell5 = newRow.insertCell(4);
+            var newCell6 = newRow.insertCell(5);
 
             // Append a text node to the cell
 
-            var aTag = document.createElement("A");
 
 
-            if(IQPs[i].title == null){
+            if(sponsors[i] == null){
               var newText1 = document.createTextNode("");
             }
             else{
-              var newText1 = document.createTextNode(IQPs[i].title);
+              var newText1 = document.createTextNode(sponsors[i]);
             }
 
-            if(IQPs[i].sponsor == null){
+            if(sponsors[i+1] == null){
               var newText2 = document.createTextNode("");
             }
             else{
-              var newText2 = document.createTextNode(IQPs[i].sponsor);
+              var newText2 = document.createTextNode(sponsors[i+1]);
             }
 
-            if(IQPs[i].URL == null){
+            if(sponsors[i+2] == null){
               var newText3 = document.createTextNode("");
             }
             else{
-              var newText3 = document.createTextNode(IQPs[i].URL);
-
-              aTag.setAttribute('href', IQPs[i].URL);
-              aTag.setAttribute('target', "_blank");
+              var newText3 = document.createTextNode(sponsors[i+2]);
             }
 
+            if(sponsors[i+3] == null){
+              var newText4 = document.createTextNode("");
+            }
+            else{
+              var newText4 = document.createTextNode(sponsors[i+3]);
+            }
+
+            if(sponsors[i+4] == null){
+              var newText5 = document.createTextNode("");
+            }
+            else{
+              var newText5 = document.createTextNode(sponsors[i+4]);
+            }
+
+            if(sponsors[i+5] == null){
+              var newText6 = document.createTextNode("");
+            }
+            else{
+              var newText6 = document.createTextNode(sponsors[i+5]);
+            }
 
             newCell1.appendChild(newText1);
             newCell2.appendChild(newText2);
-
-            aTag.appendChild(newText3);
-            newCell3.appendChild(aTag);
-
+            newCell3.appendChild(newText3);
+            newCell4.appendChild(newText4);
+            newCell5.appendChild(newText5);
+            newCell6.appendChild(newText6);
           }
 
 
