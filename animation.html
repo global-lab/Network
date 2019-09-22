@@ -91,9 +91,8 @@
         </div>
         <ul class="nav navbar-nav">
           <li><a href="index.html">Sponsors</a></li>
-          <li><a href="climateChange.html">Climate Change</a></li>
-          <li class="active"><a href="points.html">points</a></li>
           <li><a href="WIN.html">WIN</a></li>
+          <li class="active"><a href="animation.html">Animation</a></li>
         </ul>
       </div>
     </nav>
@@ -102,7 +101,18 @@
       <div id="mapid"></div>
     </div>
     <div class="col-sm-4" id="timeline">
-      
+      <div class="col-sm-2" style="text-align: center">
+
+        </div>
+        <div class="col-sm-4" style="text-align: center">
+          <button id="playButton" type="button" class="btn-lg btn-success btn-block" onclick="Reset()">Play!</button>
+        </div>
+        <div class="col-sm-4" style="text-align: center">
+          <button id="pauseButton" type="button" class="btn-lg btn-danger btn-block" onclick="pauseAnimation()" disabled>Pause</button>
+        </div>
+        <div class="col-sm-2" style="text-align: center">
+
+        </div>
     </div>
     
 
@@ -123,22 +133,7 @@
 
       projectCenters = {
 
-        "Worcester Community Project Center": [41.2626, -70.8023],
-        "Namibia": [-22.9576, 18.4904],
-        "Puerto Rico": [18.2208, -66.5901],
-        "Bar Harbor, Maine": [44.3876, -68.2039],
-        "Microsoft Corporation": [0, 0],
-        "Ifrane, Morocco": [33.5228, -5.1110],
-        "WORC / Worcester Community Project Center": [43.2626, -72.8023],
-        "Wuhan, China": [30.5928, 114.3055],
-        "Lille, France": [50.6292, 3.0573],
-        "Pioneer Valley Econ Dev": [10, 10],
-        "Shanghai, China": [31.2304, 121.4737],
-
-
-
-
-        "": [70, 0],
+        "": [42.2744, -71.80874],
         "Acadia National Park, Maine Project Center - IQP": [44.3386, -68.2733],
         "Asuncion, Paraguay Project Center - IQP": [-25.2637, -57.5759],
         "Bangkok, Thailand Project Center - IQP": [13.7563, 100.5018],
@@ -177,10 +172,10 @@
         "Tortola, British Virgin Islands": [18.4335, -64.6333],
         "Venice, Italy Project Center - IQP": [45.4408, 12.3155],
         "Washington, DC Project Center - IQP": [38.9072, -77.0369],
-        "Water Resource Outreach Center (Massachusetts) - IQP": [70, 10],
+        "Water Resource Outreach Center (Massachusetts) - IQP": [42.2625, -71.80188],
         "Wellington, New Zealand Project Center - IQP": [-41.2865, 174.7762],
         "Windhoek, Namibia Project Center - IQP": [-22.5609, 17.0658],
-        "Worcester Community Project Center (Massachusetts) - IQP": [70, 20],
+        "Worcester Community Project Center (Massachusetts) - IQP": [42.25991, -71.80192],
         "Worcester, England Project Center - IQP": [52.1936, -2.2216],
         "Worcester, MA": [42.2626, -71.8023],
         "Yerevan, Armenia Project Center - IQP": [40.1872, 44.5152],
@@ -196,6 +191,11 @@
     
       var currentCountry;
 
+      var paused = true;
+
+      var interval = 100; 
+      var anim; 
+
       
 
       var sponsorInfo = {};
@@ -207,12 +207,31 @@
         console.log(data);
         
         data.forEach(function(info){
-
-          if(sponsorInfo[info.ProjectCenter]){
-            sponsorInfo[info.ProjectCenter][0].data.push({"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.DateCreated});
-          }
-          else{
-            sponsorInfo[info.ProjectCenter] = [{"data": [{"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.DateCreated}], "location": projectCenters[info.ProjectCenter]}];
+          if(info.Sponsor.length >= 2){
+          	if(info.ProjectCenter == "Worcester, MA"){
+	            if(sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"]){
+	              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"][0].data.push({"sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated});
+	            }
+	            else{
+	              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"] = [{"data": [{"sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated}], "location": projectCenters["Worcester Community Project Center (Massachusetts) - IQP"]}];
+	            }
+	          }
+	          else if(info.ProjectCenter == ""){
+	            if(sponsorInfo["On Campus - IQP"]){
+	              sponsorInfo["On Campus - IQP"][0].data.push({"sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated});
+	            }
+	            else{
+	              sponsorInfo["On Campus - IQP"] = [{"data": [{"sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated}], "location": projectCenters[""]}];
+	            }
+	          }
+	          else{
+	            if(sponsorInfo[info.ProjectCenter]){
+	              sponsorInfo[info.ProjectCenter][0].data.push({"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.DateCreated});
+	            }
+	            else{
+	              sponsorInfo[info.ProjectCenter] = [{"data": [{"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.DateCreated}], "location": projectCenters[info.ProjectCenter]}];
+	            }
+	          }
           }
 
           
@@ -252,14 +271,17 @@
             updateTable(key, filteredInfo[key][0].data);
           });
 
+
           var markerL = new L.FeatureGroup();
           markerL.addLayer(marker)
+
+          mymap.addLayer(markerL)
 
           markerLayers[key] = markerL
          
         })
 
-
+        startAnimation()
       }
 
       function showPopup(){
@@ -380,6 +402,56 @@
 
         
       }
+
+      currentDate = new Date("1998-01-01")
+
+
+      function Reset(){
+        document.getElementById("playButton").disabled = true
+        document.getElementById("pauseButton").disabled = false
+
+        paused = false
+        currentDate = new Date("1998-01-01")
+      }
+
+      function pauseAnimation(){
+        if(paused){
+          paused = false
+          document.getElementById("pauseButton").innerHTML = "Pause"
+        }
+        else{
+          paused = true
+          document.getElementById("pauseButton").innerHTML = "Resume"
+        }
+      }
+
+
+      function startAnimation(){
+
+        anim = setInterval(request , interval);
+      }  
+
+
+      function request() { 
+
+        if(!paused){
+          if(currentDate < new Date("2020-02-01")){
+            currentDate =  new Date(currentDate.setMonth(currentDate.getMonth() + 1))
+
+      		update2(currentDate)
+          }
+          else{
+
+            document.getElementById("playButton").disabled = false;
+            document.getElementById("pauseButton").disabled = true;
+
+          }
+
+        }
+      }
+
+
+
       
     </script>
     <script src="slider.js"></script>
