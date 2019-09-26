@@ -23,6 +23,23 @@ var slider = svgSlider.append("g")
   .attr("transform", "translate(" + 50 + "," + 100 + ")");
 
 
+var text1 = svgSlider.append("text")
+                    .attr("x", 20)
+                    .attr("y", 40)
+                    .attr("font-size", "20px")
+                    .attr("fill", "white")
+                    .text("After " + formatDate(startDate));
+
+var borderPath = svgSlider.append("rect")
+  .attr("x", 0)
+  .attr("y", 10)
+  .attr("height", 150)
+  .attr("width",450)
+  .style("stroke", "white")
+  .style("fill", "none")
+  .style("stroke-width", 2);
+
+
 
 slider.append("line")
     .attr("class", "track")
@@ -69,6 +86,7 @@ function update(h) {
   handle.attr("cx", xScale(h));
   label.attr("x", xScale(h))
     .text(formatDate(h));
+  text1.text("After " + formatDate(h))
   
   beforeDate = new Date(formatDate(h))
 
@@ -85,6 +103,23 @@ var svgSlider2 = d3.select("#timeline")
 var slider2 = svgSlider2.append("g")
   .attr("class", "slider")
   .attr("transform", "translate(" + 50 + "," + 100 + ")");
+
+
+var text2 = svgSlider2.append("text")
+                  .attr("x", 20)
+                  .attr("y", 40)
+                  .attr("font-size", "20px")
+                  .attr("fill", "white")
+                  .text("Before " + formatDate(endDate));
+
+var borderPath2 = svgSlider2.append("rect")
+  .attr("x", 0)
+  .attr("y", 10)
+  .attr("height", 150)
+  .attr("width",450)
+  .style("stroke", "white")
+  .style("fill", "none")
+  .style("stroke-width", 2);
 
 
 
@@ -125,6 +160,7 @@ var label2 = slider2.append("text")
     .attr("style", "fill: #fff")
     .attr("text-anchor", "middle")
     .text(formatDate(endDate))
+    .attr("x", xScale(endDate))
     .attr("transform", "translate(0," + (-25) + ")")
 
 
@@ -134,6 +170,7 @@ function update2(h) {
   handle2.attr("cx", xScale(h));
   label2.attr("x", xScale(h))
     .text(formatDate(h));
+  text2.text("Before " + formatDate(h))
   
   afterDate = new Date(formatDate(h))
 

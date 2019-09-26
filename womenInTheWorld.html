@@ -12,6 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 
+
     <style>
 
       body { background-color: #30303d; color: #fff; }
@@ -69,17 +70,9 @@
   </head>
   <body>
 
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">IQP Research Themes</a>
-        </div>
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="index.html">Project Partners</a></li>
-          <li><a href="WIN.html">Women in the World</a></li>
-        </ul>
-      </div>
-    </nav>
+    <div class="col-sm-12">
+      <h1>Women in the World Project</h1>
+    </div>
 
     <div class="col-sm-8" id="chartdiv">
       <div id="mapid"></div>
@@ -93,7 +86,7 @@
     <br>
 
     <div class="col-sm-12">
-      <h3 id="sponsorTitle" style="text-align: center;">Click on a location to see our project partners at that site</h3>
+      <h3 id="sponsorTitle" style="text-align: center;">Click on a location to see the Women in the World projects at that site</h3>
     </div>
 
     <div class="col-sm-12" id="sponsorList">
@@ -171,36 +164,38 @@
 
 
 
-      d3.csv("iqp_legacyfiles.csv", function(data) {
+      d3.csv("WINProjectsUpdated.csv", function(data) {
         console.log(data);
         
         data.forEach(function(info){
-          if(info.Sponsor.length >= 2){
-            if(info.ProjectCenter == "Worcester, MA"){
-              if(sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"]){
-                sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"][0].data.push({"sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated});
-              }
-              else{
-                sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"] = [{"data": [{"sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated}], "location": projectCenters["Worcester Community Project Center (Massachusetts) - IQP"]}];
-              }
-            }
-            else if(info.ProjectCenter == ""){
-              if(sponsorInfo["On Campus - IQP"]){
-                sponsorInfo["On Campus - IQP"][0].data.push({"sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated});
-              }
-              else{
-                sponsorInfo["On Campus - IQP"] = [{"data": [{"sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated}], "location": projectCenters[""]}];
-              }
+
+
+          if(info.ProjectCenter_x == "Worcester, MA"){
+            if(sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"]){
+              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated, "URL": info.Link});
             }
             else{
-              if(sponsorInfo[info.ProjectCenter]){
-                sponsorInfo[info.ProjectCenter][0].data.push({"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.DateCreated});
-              }
-              else{
-                sponsorInfo[info.ProjectCenter] = [{"data": [{"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.DateCreated}], "location": projectCenters[info.ProjectCenter]}];
-              }
+              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated, "URL": info.Link}], "location": projectCenters["Worcester Community Project Center (Massachusetts) - IQP"]}];
             }
           }
+          else if(info.ProjectCenter_x == ""){
+            if(sponsorInfo["On Campus - IQP"]){
+              sponsorInfo["On Campus - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated, "URL": info.Link});
+            }
+            else{
+              sponsorInfo["On Campus - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated, "URL": info.Link}], "location": projectCenters[""]}];
+            }
+          }
+          else{
+
+            if(sponsorInfo[info.ProjectCenter_x]){
+              sponsorInfo[info.ProjectCenter_x][0].data.push({"title": info.Title, "center": info.ProjectCenter_x, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link});
+            }
+            else{
+              sponsorInfo[info.ProjectCenter_x] = [{"data": [{"title": info.Title, "center": info.ProjectCenter_x, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link}], "location": projectCenters[info.ProjectCenter_x]}];
+            }
+          }
+
           
         })
 
@@ -215,6 +210,7 @@
 
 
       function createMap(){
+        
 
         var southWest = L.latLng(-90, -180),
         northEast = L.latLng(90, 180),
@@ -230,6 +226,7 @@
         }).addTo(mymap);
 
         mymap.setMaxBounds(bounds);
+
 
         Object.keys(filteredInfo).forEach(function(key) {
           // console.log(key, filteredInfo[key]);
@@ -268,16 +265,16 @@
 
 
 
-      function updateTable(country, sponsorCenterInfo){
+      function updateTable(country, WINCenterInfo){
 
         var title = document.getElementById("sponsorTitle");
-        title.innerHTML = "Sponsors for projects in " + country;
+        title.innerHTML = "WIN projects in " + country;
 
 
         var tableRef = document.getElementById("sponsorList");
         tableRef.innerHTML = "";
 
-        console.log(sponsorCenterInfo)
+        console.log(WINCenterInfo)
 
         var centerTitle = document.createElement("H3");
         centerTitle.setAttribute('style', 'text-align: center');
@@ -285,28 +282,24 @@
         tableRef.appendChild(centerTitle)
 
         var table = document.createElement("TABLE");
-        table.setAttribute('class', 'table table-bordered');
+        table.setAttribute('class', 'table');
         tableRef.appendChild(table)
 
-        sponsors = []
 
-        sponsorCenterInfo.forEach(function(data) {
+        var header = table.createTHead();
+        var row = header.insertRow(0);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        cell1.innerHTML = "<b>Title</b>";
+        cell2.innerHTML = "<b>Sponsor</b>";
+        cell3.innerHTML = "<b>Date</b>";
+        cell4.innerHTML = "<b>Link</b>";
 
-          center = data.center;
-          sponsors.push(data.sponsor);
-        });
 
-        sponsors.sort();
-        sponsors = [...new Set(sponsors)];
-
-
-        var i = 0
-
-        if(sponsors[0] == ""){
-          i = 1
-        }
-
-        for(i; i < sponsors.length; i+=6){
+        for(var i = 0; i < WINCenterInfo.length; i+=1){
+          
           // Insert a row at the end of the table
           var newRow = table.insertRow(-1);
 
@@ -315,64 +308,51 @@
           var newCell2 = newRow.insertCell(1);
           var newCell3 = newRow.insertCell(2);
           var newCell4 = newRow.insertCell(3);
-          var newCell5 = newRow.insertCell(4);
-          var newCell6 = newRow.insertCell(5);
 
           // Append a text node to the cell
 
+          var aTag = document.createElement("A");
 
 
-          if(sponsors[i] == null){
+          if(WINCenterInfo[i].title == null){
             var newText1 = document.createTextNode("");
           }
           else{
-            var newText1 = document.createTextNode(sponsors[i]);
+            var newText1 = document.createTextNode(WINCenterInfo[i].title);
           }
 
-          if(sponsors[i+1] == null){
+          if(WINCenterInfo[i].sponsor == null){
             var newText2 = document.createTextNode("");
           }
           else{
-            var newText2 = document.createTextNode(sponsors[i+1]);
+            var newText2 = document.createTextNode(WINCenterInfo[i].sponsor);
           }
 
-          if(sponsors[i+2] == null){
+          if(WINCenterInfo[i].date == null){
             var newText3 = document.createTextNode("");
           }
           else{
-            var newText3 = document.createTextNode(sponsors[i+2]);
+            var newText3 = document.createTextNode(WINCenterInfo[i].date);
           }
 
-          if(sponsors[i+3] == null){
+          if(WINCenterInfo[i].URL == null){
             var newText4 = document.createTextNode("");
           }
           else{
-            var newText4 = document.createTextNode(sponsors[i+3]);
+            var newText4 = document.createTextNode(WINCenterInfo[i].URL);
+
+            aTag.setAttribute('href', WINCenterInfo[i].URL);
+            aTag.setAttribute('target', "_blank");
           }
 
-          if(sponsors[i+4] == null){
-            var newText5 = document.createTextNode("");
-          }
-          else{
-            var newText5 = document.createTextNode(sponsors[i+4]);
-          }
-
-          if(sponsors[i+5] == null){
-            var newText6 = document.createTextNode("");
-          }
-          else{
-            var newText6 = document.createTextNode(sponsors[i+5]);
-          }
 
           newCell1.appendChild(newText1);
           newCell2.appendChild(newText2);
           newCell3.appendChild(newText3);
-          newCell4.appendChild(newText4);
-          newCell5.appendChild(newText5);
-          newCell6.appendChild(newText6);
-        }
 
-        
+          aTag.appendChild(newText4);
+          newCell4.appendChild(aTag);
+        }
       }
       
     </script>
