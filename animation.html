@@ -79,6 +79,49 @@
         stroke-width: 1.25px;
       }
 
+      
+      /*  
+        Side Navigation Menu V2, RWD
+        ===================
+        License:
+        https://goo.gl/EaUPrt
+        ===================
+        Author: @PableraShow
+
+       */
+      .blue { color: #185875; }
+
+
+      .container td {
+          font-weight: normal;
+          font-size: 1em;
+          padding-bottom: 2%;
+          padding-top: 2%;
+          padding-left: 2%; 
+          padding-right: 2%; 
+          border-right: 2px solid #30303d;
+          border-bottom: 2px solid #30303d;
+      }
+
+      .container {
+          text-align: center;
+          overflow: hidden;
+          width: 90%;
+          margin: 0 auto;
+          display: table;
+          padding: 0 0 8em 0;
+      }
+
+      /* Background-color of the odd rows */
+      .container tr:nth-child(odd) {
+          background-color: #323C50;
+      }
+
+      /* Background-color of the even rows */
+      .container tr:nth-child(even) {
+          background-color: #2C3446;
+      }
+
     </style>
   
   </head>
@@ -315,7 +358,7 @@
         tableRef.appendChild(centerTitle)
 
         var table = document.createElement("TABLE");
-        table.setAttribute('class', 'table table-bordered');
+        table.setAttribute('class', 'container');
         tableRef.appendChild(table)
 
         sponsors = []
@@ -336,7 +379,7 @@
           i = 1
         }
 
-        for(i; i < sponsors.length; i+=6){
+        for(i; i < sponsors.length; i+=4){
           // Insert a row at the end of the table
           var newRow = table.insertRow(-1);
 
@@ -345,8 +388,6 @@
           var newCell2 = newRow.insertCell(1);
           var newCell3 = newRow.insertCell(2);
           var newCell4 = newRow.insertCell(3);
-          var newCell5 = newRow.insertCell(4);
-          var newCell6 = newRow.insertCell(5);
 
           // Append a text node to the cell
 
@@ -380,26 +421,10 @@
             var newText4 = document.createTextNode(sponsors[i+3]);
           }
 
-          if(sponsors[i+4] == null){
-            var newText5 = document.createTextNode("");
-          }
-          else{
-            var newText5 = document.createTextNode(sponsors[i+4]);
-          }
-
-          if(sponsors[i+5] == null){
-            var newText6 = document.createTextNode("");
-          }
-          else{
-            var newText6 = document.createTextNode(sponsors[i+5]);
-          }
-
           newCell1.appendChild(newText1);
           newCell2.appendChild(newText2);
           newCell3.appendChild(newText3);
           newCell4.appendChild(newText4);
-          newCell5.appendChild(newText5);
-          newCell6.appendChild(newText6);
         }
 
         
