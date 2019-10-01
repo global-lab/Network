@@ -65,6 +65,85 @@
         stroke-width: 1.25px;
       }
 
+      /*  
+        Side Navigation Menu V2, RWD
+        ===================
+        License:
+        https://goo.gl/EaUPrt
+        ===================
+        Author: @PableraShow
+
+       */
+
+
+      .blue { color: #185875; }
+
+      .container td tr th{
+        text-align: center;
+      }
+
+      .container th h1 {
+          font-weight: bold;
+          font-size: 1em;
+          text-align: center;
+          color: #185875;
+      }
+
+      .container td {
+          font-weight: normal;
+          font-size: 1em;
+        -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+           -moz-box-shadow: 0 2px 2px -2px #0E1119;
+                box-shadow: 0 2px 2px -2px #0E1119;
+      }
+
+      .container {
+          text-align: center;
+          overflow: auto;
+          width: 80%;
+          margin: 0 auto;
+        display: table;
+        table-layout: fixed;
+        padding: 0 0 8em 0;
+      }
+
+      .container td, .container th {
+          padding-bottom: 2%;
+          padding-top: 2%;
+        padding-left:2%;
+        padding-right:2%;  
+        border-right: 2px solid #30303d;
+                border-bottom: 2px solid #30303d;
+        word-wrap: break-word;
+      }
+
+      /* Background-color of the odd rows */
+      .container tr:nth-child(odd) {
+          background-color: #323C50;
+      }
+
+      /* Background-color of the even rows */
+      .container tr:nth-child(even) {
+          background-color: #2C3446;
+      }
+
+      .container th {
+          background-color: #1F2739;
+      }
+
+      .row-tile {
+        width: 35%;
+      }
+      .row-sponsor {
+        width: 20%;
+      }
+      .row-date {
+        width: 10%;
+      }
+      .row-link {
+        width: 35%;
+      }
+
     </style>
   
   </head>
@@ -212,8 +291,8 @@
       function createMap(){
         
 
-        var southWest = L.latLng(-90, -180),
-        northEast = L.latLng(90, 180),
+        var southWest = L.latLng(-90, -220),
+        northEast = L.latLng(90, 220),
         bounds = L.latLngBounds(southWest, northEast);
         
 
@@ -282,26 +361,30 @@
         tableRef.appendChild(centerTitle)
 
         var table = document.createElement("TABLE");
-        table.setAttribute('class', 'table');
+        table.setAttribute('class', 'container');
+        table.setAttribute('style', 'text-align: center');
         tableRef.appendChild(table)
 
 
-        var header = table.createTHead();
+        var header = table.appendChild(document.createElement('thead'))
+        header.setAttribute('style', 'text-align: center');
         var row = header.insertRow(0);
         var cell1 = row.insertCell(0);
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
         var cell4 = row.insertCell(3);
-        cell1.innerHTML = "<b>Title</b>";
-        cell2.innerHTML = "<b>Sponsor</b>";
-        cell3.innerHTML = "<b>Date</b>";
-        cell4.innerHTML = "<b>Link</b>";
+        cell1.outerHTML = "<th class=\"row-tile\" style=\"text-align: center\">Title</th>";
+        cell2.outerHTML = "<th class=\"row-sponsor\" style=\"text-align: center\">Sponsor</th>";
+        cell3.outerHTML = "<th class=\"row-date\" style=\"text-align: center\">Date</th>";
+        cell4.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
+
+        var body = table.appendChild(document.createElement('tbody'))
 
 
         for(var i = 0; i < WINCenterInfo.length; i+=1){
           
           // Insert a row at the end of the table
-          var newRow = table.insertRow(-1);
+          var newRow = body.insertRow(-1);
 
           // Insert a cell in the row at index 0
           var newCell1 = newRow.insertCell(0);
@@ -332,7 +415,9 @@
             var newText3 = document.createTextNode("");
           }
           else{
-            var newText3 = document.createTextNode(WINCenterInfo[i].date);
+            var tableDate = new Date(WINCenterInfo[i].date)
+            console.log(tableDate)
+            var newText3 = document.createTextNode(formatDate(tableDate));
           }
 
           if(WINCenterInfo[i].URL == null){
