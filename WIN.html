@@ -170,6 +170,9 @@
           <li class="active"><a href="WIN.html">Women in the World</a></li>
           <li><a href="climateStories.html">Climate Stories</a></li>
         </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#"><span class="glyphicon glyphicon-globe"></span> Global Lab</a></li>
+        </ul>
       </div>
     </nav>
 
@@ -314,6 +317,14 @@
         var southWest = L.latLng(-90, -250),
         northEast = L.latLng(90, 250),
         bounds = L.latLngBounds(southWest, northEast);
+
+        var blackIcon = new L.Icon({
+          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+        });
         
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -330,7 +341,7 @@
         Object.keys(filteredInfo).forEach(function(key) {
           // console.log(key, filteredInfo[key]);
 
-          marker = L.marker(filteredInfo[key][0].location).addTo(mymap).bindPopup(key);
+          marker = L.marker(filteredInfo[key][0].location, {icon: blackIcon}).addTo(mymap).bindPopup(key);
 
           marker.on('mouseover', showPopup);
           marker.on('mouseout', hidePopup);
