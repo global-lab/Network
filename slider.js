@@ -18,26 +18,28 @@ var xScale = d3.scaleTime()
   .range([0, 350])
   .clamp(true);
 
-var slider = svgSlider.append("g")
-  .attr("class", "slider")
-  .attr("transform", "translate(" + 50 + "," + 100 + ")");
 
-
-var text1 = svgSlider.append("text")
-                    .attr("x", 20)
-                    .attr("y", 40)
-                    .attr("font-size", "20px")
-                    .attr("fill", "white")
-                    .text("Earliest desired project date: " + formatDate(startDate));
 
 var borderPath = svgSlider.append("rect")
   .attr("x", 0)
   .attr("y", 10)
   .attr("height", 140)
   .attr("width",450)
-  .style("stroke", "white")
-  .style("fill", "none")
+  .style("fill", "#597288")
   .style("stroke-width", 2);
+
+
+var slider = svgSlider.append("g")
+  .attr("class", "slider")
+  .attr("transform", "translate(" + 50 + "," + 100 + ")");
+
+
+var text1 = svgSlider.append("text")
+            .attr("x", 20)
+            .attr("y", 40)
+            .attr("font-size", "20px")
+            .attr("fill", "black")
+            .text("Earliest desired project date: " + formatDate(startDate));
 
 
 
@@ -74,7 +76,7 @@ var handle = slider.insert("circle", ".track-overlay")
 
 var label = slider.append("text")  
     .attr("class", "label")
-    .attr("style", "fill: #fff")
+    .attr("style", "fill: black")
     .attr("text-anchor", "middle")
     .text(formatDate(startDate))
     .attr("transform", "translate(0," + (-25) + ")")
@@ -86,7 +88,7 @@ function update(h) {
   handle.attr("cx", xScale(h));
   label.attr("x", xScale(h))
     .text(formatDate(h));
-  text1.text("After " + formatDate(h))
+  text1.text("Earliest desired project date: " + formatDate(h))
   
   beforeDate = new Date(formatDate(h))
 
@@ -100,6 +102,15 @@ var svgSlider2 = d3.select("#timeline")
   .attr("height", 150);
 
 
+var borderPath2 = svgSlider2.append("rect")
+  .attr("x", 0)
+  .attr("y", 10)
+  .attr("height", 140)
+  .attr("width",450)
+  .style("fill", "#597288")
+  .style("stroke-width", 2);
+
+
 var slider2 = svgSlider2.append("g")
   .attr("class", "slider")
   .attr("transform", "translate(" + 50 + "," + 100 + ")");
@@ -109,17 +120,10 @@ var text2 = svgSlider2.append("text")
                   .attr("x", 20)
                   .attr("y", 40)
                   .attr("font-size", "20px")
-                  .attr("fill", "white")
+                  .attr("fill", "black")
                   .text("Latest desired project date: " + formatDate(endDate));
 
-var borderPath2 = svgSlider2.append("rect")
-  .attr("x", 0)
-  .attr("y", 10)
-  .attr("height", 140)
-  .attr("width",450)
-  .style("stroke", "white")
-  .style("fill", "none")
-  .style("stroke-width", 2);
+
 
 
 
@@ -157,7 +161,7 @@ var handle2 = slider2.insert("circle", ".track-overlay")
 
 var label2 = slider2.append("text")  
     .attr("class", "label")
-    .attr("style", "fill: #fff")
+    .attr("style", "fill: black")
     .attr("text-anchor", "middle")
     .text(formatDate(endDate))
     .attr("x", xScale(endDate))
@@ -170,7 +174,7 @@ function update2(h) {
   handle2.attr("cx", xScale(h));
   label2.attr("x", xScale(h))
     .text(formatDate(h));
-  text2.text("Before " + formatDate(h))
+  text2.text("Latest desired project date: " + formatDate(h))
   
   afterDate = new Date(formatDate(h))
 
