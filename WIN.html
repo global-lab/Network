@@ -65,84 +65,89 @@
         stroke-width: 1.25px;
       }
 
+      a{
+        color: #005198;
+      }
+
       /*  
-  Side Navigation Menu V2, RWD
-  ===================
-  License:
-  https://goo.gl/EaUPrt
-  ===================
-  Author: @PableraShow
+        Side Navigation Menu V2, RWD
+        ===================
+        License:
+        https://goo.gl/EaUPrt
+        ===================
+        Author: @PableraShow
 
- */
+       */
 
 
-.blue { color: #185875; }
+      .blue { color: #185875; }
 
-.container td tr th{
-  text-align: center;
-}
+      .container td tr th{
+        text-align: center;
+      }
 
-.container th h1 {
-    font-weight: bold;
-    font-size: 1em;
-    text-align: center;
-    color: #185875;
-}
+      .container th h1 {
+          font-weight: bold;
+          font-size: 1em;
+          text-align: center;
+          color: #185875;
+      }
 
-.container td {
-    font-weight: normal;
-    font-size: 1em;
-  -webkit-box-shadow: 0 2px 2px -2px #0E1119;
-     -moz-box-shadow: 0 2px 2px -2px #0E1119;
-          box-shadow: 0 2px 2px -2px #0E1119;
-}
+      .container td {
+          font-weight: normal;
+          font-size: 1em;
+        -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+           -moz-box-shadow: 0 2px 2px -2px #0E1119;
+                box-shadow: 0 2px 2px -2px #0E1119;
+      }
 
-.container {
-    text-align: center;
-    overflow: auto;
-    width: 80%;
-    margin: 0 auto;
-  display: table;
-  table-layout: fixed;
-  padding: 0 0 8em 0;
-}
+      .container {
+          text-align: center;
+          overflow: auto;
+          width: 80%;
+          margin: 0 auto;
+        display: table;
+        table-layout: fixed;
+        padding: 0 0 8em 0;
+        color: black;
+      }
 
-.container td, .container th {
-    padding-bottom: 2%;
-    padding-top: 2%;
-  padding-left:2%;
-  padding-right:2%;  
-  border-right: 2px solid #30303d;
-          border-bottom: 2px solid #30303d;
-  word-wrap: break-word;
-}
+      .container td, .container th {
+          padding-bottom: 2%;
+          padding-top: 2%;
+        padding-left:2%;
+        padding-right:2%;  
+        border-right: 2px solid #30303d;
+                border-bottom: 2px solid #30303d;
+        word-wrap: break-word;
+      }
 
-/* Background-color of the odd rows */
-.container tr:nth-child(odd) {
-    background-color: #323C50;
-}
+      /* Background-color of the odd rows */
+      .container tr:nth-child(odd) {
+          background-color: #acb0b6;
+      }
 
-/* Background-color of the even rows */
-.container tr:nth-child(even) {
-    background-color: #2C3446;
-}
+      /* Background-color of the even rows */
+      .container tr:nth-child(even) {
+          background-color: #ddd6d8;
+      }
 
-.container th {
-    background-color: #1F2739;
-}
+      .container th {
+          background-color: #597288;
+      }
 
-.row-tile {
-  width: 35%;
-}
-.row-sponsor {
-  width: 20%;
-}
-.row-date {
-  width: 10%;
-}
-.row-link {
-  width: 35%;
-}
+      .row-tile {
+        width: 35%;
+      }
+      .row-sponsor {
+        width: 20%;
+      }
+      .row-date {
+        width: 10%;
+      }
+      .row-link {
+        width: 35%;
+      }
 
 
 
@@ -163,6 +168,7 @@
         <ul class="nav navbar-nav">
           <li><a href="index.html">Project Partners</a></li>
           <li class="active"><a href="WIN.html">Women in the World</a></li>
+          <li><a href="climateStories.html">Climate Stories</a></li>
         </ul>
       </div>
     </nav>
@@ -305,8 +311,8 @@
       function createMap(){
         
 
-        var southWest = L.latLng(-90, -220),
-        northEast = L.latLng(90, 220),
+        var southWest = L.latLng(-90, -250),
+        northEast = L.latLng(90, 250),
         bounds = L.latLngBounds(southWest, northEast);
         
 
@@ -314,7 +320,7 @@
           attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
           maxZoom: 18,
           minZoom: 2,
-          id: 'mapbox.streets-satellite',
+          id: 'mapbox.streets',
           accessToken: 'pk.eyJ1IjoiamFzb25hYmVsMTIzIiwiYSI6ImNqenNubWRnbDFibTQzbm1pOTNxbTIxemoifQ.9BZFzS-MQts7O6aGIoEqTw'
         }).addTo(mymap);
 

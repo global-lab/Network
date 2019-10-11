@@ -11,7 +11,7 @@ var afterDate = endDate;
 var svgSlider = d3.select("#timeline")
   .append("svg")
   .attr("width", 450)
-  .attr("height", 200);
+  .attr("height", 150);
 
 var xScale = d3.scaleTime()
   .domain([startDate, endDate])
@@ -28,12 +28,12 @@ var text1 = svgSlider.append("text")
                     .attr("y", 40)
                     .attr("font-size", "20px")
                     .attr("fill", "white")
-                    .text("After " + formatDate(startDate));
+                    .text("Earliest desired project date: " + formatDate(startDate));
 
 var borderPath = svgSlider.append("rect")
   .attr("x", 0)
   .attr("y", 10)
-  .attr("height", 150)
+  .attr("height", 140)
   .attr("width",450)
   .style("stroke", "white")
   .style("fill", "none")
@@ -97,7 +97,7 @@ function update(h) {
 var svgSlider2 = d3.select("#timeline")
   .append("svg")
   .attr("width", 450)
-  .attr("height", 200);
+  .attr("height", 150);
 
 
 var slider2 = svgSlider2.append("g")
@@ -110,12 +110,12 @@ var text2 = svgSlider2.append("text")
                   .attr("y", 40)
                   .attr("font-size", "20px")
                   .attr("fill", "white")
-                  .text("Before " + formatDate(endDate));
+                  .text("Latest desired project date: " + formatDate(endDate));
 
 var borderPath2 = svgSlider2.append("rect")
   .attr("x", 0)
   .attr("y", 10)
-  .attr("height", 150)
+  .attr("height", 140)
   .attr("width",450)
   .style("stroke", "white")
   .style("fill", "none")

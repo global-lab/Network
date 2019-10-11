@@ -12,6 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 
+
     <style>
 
       body { background-color: #30303d; color: #fff; }
@@ -64,60 +65,113 @@
         stroke-width: 1.25px;
       }
 
+      a{
+        color: #005198;
+      }
 
       /*  
-        Side Navigation Menu V2, RWD
-        ===================
-        License:
-        https://goo.gl/EaUPrt
-        ===================
-        Author: @PableraShow
+  Side Navigation Menu V2, RWD
+  ===================
+  License:
+  https://goo.gl/EaUPrt
+  ===================
+  Author: @PableraShow
 
-       */
-
-      .blue { color: #185875; }
+ */
 
 
-      .container td {
-          font-weight: normal;
-          font-size: 1em;
-          padding-bottom: 2%;
-          padding-top: 2%;
-          padding-left: 2%; 
-          padding-right: 2%; 
-          border-right: 2px solid #30303d;
+.blue { color: #185875; }
+
+.container td tr th{
+  text-align: center;
+}
+
+.container th h1 {
+    font-weight: bold;
+    font-size: 1em;
+    text-align: center;
+    color: #185875;
+}
+
+.container td {
+    font-weight: normal;
+    font-size: 1em;
+  -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+     -moz-box-shadow: 0 2px 2px -2px #0E1119;
+          box-shadow: 0 2px 2px -2px #0E1119;
+}
+
+.container {
+    text-align: center;
+    overflow: auto;
+    width: 80%;
+    margin: 0 auto;
+  display: table;
+  table-layout: fixed;
+  padding: 0 0 8em 0;
+  color: black;
+}
+
+.container td, .container th {
+    padding-bottom: 2%;
+    padding-top: 2%;
+  padding-left:2%;
+  padding-right:2%;  
+  border-right: 2px solid #30303d;
           border-bottom: 2px solid #30303d;
-          color: black;
-      }
+  word-wrap: break-word;
+}
 
-      .container {
-          text-align: center;
-          overflow: hidden;
-          width: 90%;
-          margin: 0 auto;
-          display: table;
-          padding: 0 0 8em 0;
-      }
+/* Background-color of the odd rows */
+.container tr:nth-child(odd) {
+    background-color: #acb0b6;
+}
 
-      /* Background-color of the odd rows */
-      .container tr:nth-child(odd) {
-          background-color: #acb0b6;
-      }
+/* Background-color of the even rows */
+.container tr:nth-child(even) {
+    background-color: #ddd6d8;
+}
 
-      /* Background-color of the even rows */
-      .container tr:nth-child(even) {
-          background-color: #ddd6d8;
-      }
+.container th {
+    background-color: #597288;
+}
+
+.row-tile {
+  width: 35%;
+}
+.row-sponsor {
+  width: 20%;
+}
+.row-date {
+  width: 10%;
+}
+.row-link {
+  width: 35%;
+}
+
+
+
+
+
+
 
     </style>
   
   </head>
   <body>
 
-    <div class="col-sm-12">
-      <h1>IQP Project Partners</h1>
-    </div>
-    
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">IQP Research Themes</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Project Partners</a></li>
+          <li><a href="WIN.html">Women in the World</a></li>
+          <li class="active"><a href="climateStories.html">Climate Stories</a></li>
+        </ul>
+      </div>
+    </nav>
 
     <div class="col-sm-8" id="chartdiv">
       <div id="mapid"></div>
@@ -131,7 +185,7 @@
     <br>
 
     <div class="col-sm-12">
-      <h3 id="sponsorTitle" style="text-align: center;">Click on a location to see our project partners at that site</h3>
+      <h3 id="sponsorTitle" style="text-align: center;">Click on a location to see the Climate Story projects at that site</h3>
     </div>
 
     <div class="col-sm-12" id="sponsorList">
@@ -209,36 +263,38 @@
 
 
 
-      d3.csv("iqp_legacyfiles.csv", function(data) {
+      d3.csv("climateStories.csv", function(data) {
         console.log(data);
         
         data.forEach(function(info){
-          if(info.Sponsor.length >= 2){
-            if(info.ProjectCenter == "Worcester, MA"){
-              if(sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"]){
-                sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"][0].data.push({"sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated});
-              }
-              else{
-                sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"] = [{"data": [{"sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated}], "location": projectCenters["Worcester Community Project Center (Massachusetts) - IQP"]}];
-              }
-            }
-            else if(info.ProjectCenter == ""){
-              if(sponsorInfo["On Campus - IQP"]){
-                sponsorInfo["On Campus - IQP"][0].data.push({"sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated});
-              }
-              else{
-                sponsorInfo["On Campus - IQP"] = [{"data": [{"sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated}], "location": projectCenters[""]}];
-              }
+
+
+          if(info.ProjectCenter == "Worcester, MA"){
+            if(sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"]){
+              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.Date, "URL": info.Link});
             }
             else{
-              if(sponsorInfo[info.ProjectCenter]){
-                sponsorInfo[info.ProjectCenter][0].data.push({"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.DateCreated});
-              }
-              else{
-                sponsorInfo[info.ProjectCenter] = [{"data": [{"sponsor": info.Sponsor, "center": info.ProjectCenter, "date": info.DateCreated}], "location": projectCenters[info.ProjectCenter]}];
-              }
+              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.Date, "URL": info.Link}], "location": projectCenters["Worcester Community Project Center (Massachusetts) - IQP"]}];
             }
           }
+          else if(info.ProjectCenter == ""){
+            if(sponsorInfo["On Campus - IQP"]){
+              sponsorInfo["On Campus - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.Date, "URL": info.Link});
+            }
+            else{
+              sponsorInfo["On Campus - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.Date, "URL": info.Link}], "location": projectCenters[""]}];
+            }
+          }
+          else{
+
+            if(sponsorInfo[info.ProjectCenter]){
+              sponsorInfo[info.ProjectCenter][0].data.push({"title": info.Title, "center": info.ProjectCenter, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link});
+            }
+            else{
+              sponsorInfo[info.ProjectCenter] = [{"data": [{"title": info.Title, "center": info.ProjectCenter, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link}], "location": projectCenters[info.ProjectCenter]}];
+            }
+          }
+
           
         })
 
@@ -303,21 +359,20 @@
       function hidePopup(){
         this.closePopup();
       }
-
       
 
 
 
-      function updateTable(country, sponsorCenterInfo){
+      function updateTable(country, WINCenterInfo){
 
         var title = document.getElementById("sponsorTitle");
-        title.innerHTML = "Sponsors for projects in " + country;
+        title.innerHTML = "WIN projects in " + country;
 
 
         var tableRef = document.getElementById("sponsorList");
         tableRef.innerHTML = "";
 
-        console.log(sponsorCenterInfo)
+        console.log(WINCenterInfo)
 
         var centerTitle = document.createElement("H3");
         centerTitle.setAttribute('style', 'text-align: center');
@@ -326,29 +381,29 @@
 
         var table = document.createElement("TABLE");
         table.setAttribute('class', 'container');
+        table.setAttribute('style', 'text-align: center');
         tableRef.appendChild(table)
 
-        sponsors = []
 
-        sponsorCenterInfo.forEach(function(data) {
+        var header = table.appendChild(document.createElement('thead'))
+        header.setAttribute('style', 'text-align: center');
+        var row = header.insertRow(0);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        cell1.outerHTML = "<th class=\"row-tile\" style=\"text-align: center\">Title</th>";
+        cell2.outerHTML = "<th class=\"row-sponsor\" style=\"text-align: center\">Sponsor</th>";
+        cell3.outerHTML = "<th class=\"row-date\" style=\"text-align: center\">Date</th>";
+        cell4.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
 
-          center = data.center;
-          sponsors.push(data.sponsor);
-        });
-
-        sponsors.sort();
-        sponsors = [...new Set(sponsors)];
+        var body = table.appendChild(document.createElement('tbody'))
 
 
-        var i = 0
-
-        if(sponsors[0] == ""){
-          i = 1
-        }
-
-        for(i; i < sponsors.length; i+=4){
+        for(var i = 0; i < WINCenterInfo.length; i+=1){
+          
           // Insert a row at the end of the table
-          var newRow = table.insertRow(-1);
+          var newRow = body.insertRow(-1);
 
           // Insert a cell in the row at index 0
           var newCell1 = newRow.insertCell(0);
@@ -358,44 +413,50 @@
 
           // Append a text node to the cell
 
+          var aTag = document.createElement("A");
 
 
-          if(sponsors[i] == null){
+          if(WINCenterInfo[i].title == null){
             var newText1 = document.createTextNode("");
           }
           else{
-            var newText1 = document.createTextNode(sponsors[i]);
+            var newText1 = document.createTextNode(WINCenterInfo[i].title);
           }
 
-          if(sponsors[i+1] == null){
+          if(WINCenterInfo[i].sponsor == null){
             var newText2 = document.createTextNode("");
           }
           else{
-            var newText2 = document.createTextNode(sponsors[i+1]);
+            var newText2 = document.createTextNode(WINCenterInfo[i].sponsor);
           }
 
-          if(sponsors[i+2] == null){
+          if(WINCenterInfo[i].date == null){
             var newText3 = document.createTextNode("");
           }
           else{
-            var newText3 = document.createTextNode(sponsors[i+2]);
+            var tableDate = new Date(WINCenterInfo[i].date)
+            console.log(tableDate)
+            var newText3 = document.createTextNode(formatDate(tableDate));
           }
 
-          if(sponsors[i+3] == null){
+          if(WINCenterInfo[i].URL == null){
             var newText4 = document.createTextNode("");
           }
           else{
-            var newText4 = document.createTextNode(sponsors[i+3]);
+            var newText4 = document.createTextNode(WINCenterInfo[i].URL);
+
+            aTag.setAttribute('href', WINCenterInfo[i].URL);
+            aTag.setAttribute('target', "_blank");
           }
 
 
           newCell1.appendChild(newText1);
           newCell2.appendChild(newText2);
           newCell3.appendChild(newText3);
-          newCell4.appendChild(newText4);
-        }
 
-        
+          aTag.appendChild(newText4);
+          newCell4.appendChild(aTag);
+        }
       }
       
     </script>

@@ -65,6 +65,10 @@
         stroke-width: 1.25px;
       }
 
+      a{
+        color: #005198;
+      }
+
       /*  
         Side Navigation Menu V2, RWD
         ===================
@@ -105,6 +109,7 @@
         display: table;
         table-layout: fixed;
         padding: 0 0 8em 0;
+        color: black;
       }
 
       .container td, .container th {
@@ -119,16 +124,16 @@
 
       /* Background-color of the odd rows */
       .container tr:nth-child(odd) {
-          background-color: #323C50;
+          background-color: #acb0b6;
       }
 
       /* Background-color of the even rows */
       .container tr:nth-child(even) {
-          background-color: #2C3446;
+          background-color: #ddd6d8;
       }
 
       .container th {
-          background-color: #1F2739;
+          background-color: #597288;
       }
 
       .row-tile {
@@ -291,8 +296,8 @@
       function createMap(){
         
 
-        var southWest = L.latLng(-90, -220),
-        northEast = L.latLng(90, 220),
+        var southWest = L.latLng(-90, -250),
+        northEast = L.latLng(90, 250),
         bounds = L.latLngBounds(southWest, northEast);
         
 
@@ -300,7 +305,7 @@
           attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
           maxZoom: 18,
           minZoom: 2,
-          id: 'mapbox.streets-satellite',
+          id: 'mapbox.streets',
           accessToken: 'pk.eyJ1IjoiamFzb25hYmVsMTIzIiwiYSI6ImNqenNubWRnbDFibTQzbm1pOTNxbTIxemoifQ.9BZFzS-MQts7O6aGIoEqTw'
         }).addTo(mymap);
 
