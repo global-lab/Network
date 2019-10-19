@@ -182,11 +182,12 @@ function update2(h) {
 }
 
 
-
+var currentChoices = [];
 
 function updateData(){
     // console.log(beforeDate)
     // console.log(afterDate)
+    // console.log(currentChoices)
 
     filteredInfo = _.cloneDeep(sponsorInfo);
 
@@ -195,12 +196,33 @@ function updateData(){
 
         for(var i = 0; i < filteredInfo[key][0].data.length; i+=1){
 
-
             projectDate = new Date(filteredInfo[key][0].data[i].date)
 
 
             if(projectDate > beforeDate && projectDate < afterDate){
-                //console.log("here")
+              if(currentChoices.length > 0){
+                try{
+                  genTerm = filteredInfo[key][0].data[i].General
+                  split = genTerm.split('|')
+
+                  has = false
+
+                  for(x = 0; x < split.length; x+=1){
+                    if(currentChoices.includes(split[x])){
+                      has = true
+                    }
+                  }
+
+                  if(!has){
+                    filteredInfo[key][0].data.splice(i, 1);
+                    i--;
+                  }
+
+                }
+                catch(err){
+                  // console.log("no term")
+                }
+              } 
             }
             else{
               filteredInfo[key][0].data.splice(i, 1);

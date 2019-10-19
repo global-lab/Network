@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/ > -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+    
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+
+    <style>
+
+      body { background-color: #30303d; color: #fff; }
+
+      #mapid { 
+        height: 75vh; 
+        width: 100%;
+        position: center;
+      }
+
+      .ticks line{
+        stroke: white;
+      }
+
+      .ticks text{
+        fill: black;
+        font-size: 10px;
+      }
+
+      .track,
+      .track-inset,
+      .track-overlay {
+        stroke-linecap: round;
+
+      }
+
+      .track {
+        stroke: #000;
+        stroke-opacity: 0.3;
+        stroke-width: 10px;
+      }
+
+      .track-inset {
+        stroke: #dcdcdc;
+        stroke-width: 8px;
+      }
+
+      .track-overlay {
+        pointer-events: stroke;
+        stroke-width: 50px;
+        stroke: transparent;
+        cursor: crosshair;
+
+      }
+
+      .handle {
+        fill: #fff;
+        stroke: #000;
+        stroke-opacity: 0.5;
+        stroke-width: 1.25px;
+      }
+
+      a{
+        color: #005198;
+      }
+
+      /*  
+        Side Navigation Menu V2, RWD
+        ===================
+        License:
+        https://goo.gl/EaUPrt
+        ===================
+        Author: @PableraShow
+
+       */
+
+
+      .blue { color: #185875; }
+
+      .container td tr th{
+        text-align: center;
+      }
+
+      .container th h1 {
+          font-weight: bold;
+          font-size: 1em;
+          text-align: center;
+          color: #185875;
+      }
+
+      .container td {
+          font-weight: normal;
+          font-size: 1em;
+        -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+           -moz-box-shadow: 0 2px 2px -2px #0E1119;
+                box-shadow: 0 2px 2px -2px #0E1119;
+      }
+
+      .container {
+          text-align: center;
+          overflow: auto;
+          width: 90%;
+          margin: 0 auto;
+        display: table;
+        table-layout: fixed;
+        padding: 0 0 8em 0;
+        color: black;
+      }
+
+      .container td, .container th {
+          padding-bottom: 2%;
+          padding-top: 2%;
+        padding-left:2%;
+        padding-right:2%;  
+        border-right: 2px solid #30303d;
+                border-bottom: 2px solid #30303d;
+        word-wrap: break-word;
+      }
+
+      /* Background-color of the odd rows */
+      .container tr:nth-child(odd) {
+          background-color: #acb0b6;
+      }
+
+      /* Background-color of the even rows */
+      .container tr:nth-child(even) {
+          background-color: #ddd6d8;
+      }
+
+      .container th {
+          background-color: #597288;
+      }
+
+      .row-tile {
+        width: 25%;
+      }
+      .row-sponsor {
+        width: 15%;
+      }
+      .row-date {
+        width: 10%;
+      }
+      .row-link {
+        width: 20%;
+      }
+      .row-subject {
+        width: 15%;
+      }
+      .row-general {
+        width: 15%;
+      }
+
+
+
+
+
+
+
+    </style>
+  
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">IQP Research Themes</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Project Partners</a></li>
+          <li class="active"><a href="categories.html">Project Subject Terms</a></li>
+          <li><a href="WIN.html">Women in the World</a></li>
+          <li><a href="climateStories.html">Climate Stories</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#"><span class="glyphicon glyphicon-globe"></span> Global Lab</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="col-sm-8" id="chartdiv">
+      <div id="mapid"></div>
+    </div>
+    <div class="col-sm-4">
+      <div class="col-sm-12" id="timeline">
+
+      </div>
+      <div class="col-sm-12">
+        <div class="checkbox">
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Water">Water</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Climate">Climate</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Energy">Energy</label>
+        </div>
+        <div class="checkbox">
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Education">Education</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Business">Business</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Computing">Computing</label>
+        </div>
+        
+      </div>
+      
+    </div>
+    
+
+    <br>
+    <br>
+
+    <div class="col-sm-12">
+      <h3 id="sponsorTitle" style="text-align: center;">Click on a location to see the Women in the World projects at that site</h3>
+    </div>
+
+    <div class="col-sm-12" id="sponsorList">
+
+    </div>
+
+    <div class="col-sm-12">
+      <footer>
+        <p></p>
+      </footer>
+    </div>
+    
+    
+    <script src="lodash.js"></script>
+    <script>
+
+      projectCenters = {
+
+        "": [42.2744, -71.80874],
+        "Acadia National Park, Maine Project Center - IQP": [44.3386, -68.2733],
+        "Asuncion, Paraguay Project Center - IQP": [-25.2637, -57.5759],
+        "Bangkok, Thailand Project Center - IQP": [13.7563, 100.5018],
+        "Beijing, China Project Center - IQP": [39.9042, 116.4074],
+        "Berlin, Germany Project Center - IQP": [52.5200, 13.4050],
+        "Boston, Massachusetts Project Center - IQP": [42.3601, -71.0589],
+        "British Virgin Islands": [18.4207, -64.6400],
+        "Campinas, Brazil": [-22.9329, -47.0738],
+        "Cape Town, South Africa Project Center - IQP": [-33.9249, 18.4241],
+        "Copenhagen, Denmark Project Center - IQP": [55.6761, 12.5683],
+        "Cuenca, Ecuador Project Center - IQP": [-2.9001, -79.0059],
+        "Darmstadt, Germany Project Center - IQP": [49.8728, 8.6512],
+        "Glacier National Park, Montana Project Center - IQP": [48.7596, -113.7870],
+        "Groveland, California": [37.8389, -120.2308],
+        "Hangzhou, China Project Center - IQP": [30.2741, 120.1551],
+        "Hong Kong, China Project Center - IQP": [22.3193, 114.1694],
+        "Israel Project Center (Eilat) - IQP": [29.5577, 34.9519],
+        "Japan Project Center (Kyoto) - IQP": [35.0116, 135.7681],
+        "London, England Project Center - IQP": [51.5074, -0.1278],
+        "Mandi, India Project Center - IQP": [31.5892, 76.9182],
+        "Melbourne, Australia Project Center - IQP": [-37.8136, 144.9631],
+        "Monteverde, Costa Rica Project Center - IQP": [10.2750, -84.8255],
+        "Montreal, Canada": [45.5017, -73.5673],
+        "Moscow, Russia Project Center - IQP": [55.7558, 37.6173],
+        "Nantucket, Massachusetts Project Center - IQP": [41.2835, -70.0995],
+        "Panama City, Panama Project Center - IQP": [8.9824, -79.5199],
+        "Pioneer Valley, Massachusetts Project Center - IQP": [42.2914, -72.5967],
+        "Rabat, Morocco Project Center - IQP": [33.9716, -6.8498],
+        "Reykjavik, Iceland Project Center - IQP": [64.1466, -21.9426],
+        "San Jose, Costa Rica Project Center - IQP": [9.9281, -84.0907],
+        "San Juan, Puerto Rico Project Center - IQP": [18.4655, -66.1057],
+        "Santa Fe, New Mexico Project Center - IQP": [35.6870, -105.9378],
+        "Silicon Valley, California": [37.3875, -122.0575],
+        "Thessaloniki, Greece Project Center - IQP": [40.6401, 22.9444],
+        "Tirana, Albania Project Center - IQP": [41.3275, 19.8187],
+        "Tortola, British Virgin Islands": [18.4335, -64.6333],
+        "Venice, Italy Project Center - IQP": [45.4408, 12.3155],
+        "Washington, DC Project Center - IQP": [38.9072, -77.0369],
+        "Water Resource Outreach Center (Massachusetts) - IQP": [42.2625, -71.80188],
+        "Wellington, New Zealand Project Center - IQP": [-41.2865, 174.7762],
+        "Windhoek, Namibia Project Center - IQP": [-22.5609, 17.0658],
+        "Worcester Community Project Center (Massachusetts) - IQP": [42.25991, -71.80192],
+        "Worcester, England Project Center - IQP": [52.1936, -2.2216],
+        "Worcester, MA": [42.2626, -71.8023],
+        "Yerevan, Armenia Project Center - IQP": [40.1872, 44.5152],
+        "Zurich, Switzerland Project Center - IQP": [47.3769, 8.5417]
+      }
+      
+
+      var mymap = L.map('mapid').setView([30, 10], 2);
+
+      var popup = L.popup();
+
+      var markerLayers = {};
+    
+      var currentCountry;
+
+      
+
+      var sponsorInfo = {};
+      var filteredInfo = {};
+
+
+
+      d3.csv("IQPSubjects.csv", function(data) {
+        console.log(data);
+        
+        data.forEach(function(info){
+
+
+          if(info.ProjectCenter == "Worcester, MA"){
+            if(sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"]){
+              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms});
+            }
+            else{
+              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms}], "location": projectCenters["Worcester Community Project Center (Massachusetts) - IQP"]}];
+            }
+          }
+          else if(info.ProjectCenter == ""){
+            if(sponsorInfo["On Campus - IQP"]){
+              sponsorInfo["On Campus - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms});
+            }
+            else{
+              sponsorInfo["On Campus - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms}], "location": projectCenters[""]}];
+            }
+          }
+          else{
+
+            if(sponsorInfo[info.ProjectCenter]){
+              sponsorInfo[info.ProjectCenter][0].data.push({"title": info.Title, "center": info.ProjectCenter, "sponsor": info.Sponsor, "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms});
+            }
+            else{
+              sponsorInfo[info.ProjectCenter] = [{"data": [{"title": info.Title, "center": info.ProjectCenter, "sponsor": info.Sponsor, "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms}], "location": projectCenters[info.ProjectCenter]}];
+            }
+          }
+
+          
+        })
+
+        console.log(sponsorInfo)
+
+        filteredInfo = _.cloneDeep(sponsorInfo);
+
+        createMap();
+        
+      });
+
+
+
+      function createMap(){
+        
+
+        var southWest = L.latLng(-90, -250),
+        northEast = L.latLng(90, 250),
+        bounds = L.latLngBounds(southWest, northEast);
+
+        var blackIcon = new L.Icon({
+          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+        });
+        
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+          maxZoom: 18,
+          minZoom: 2,
+          id: 'mapbox.streets',
+          accessToken: 'pk.eyJ1IjoiamFzb25hYmVsMTIzIiwiYSI6ImNqenNubWRnbDFibTQzbm1pOTNxbTIxemoifQ.9BZFzS-MQts7O6aGIoEqTw'
+        }).addTo(mymap);
+
+        mymap.setMaxBounds(bounds);
+
+
+        Object.keys(filteredInfo).forEach(function(key) {
+          // console.log(key, filteredInfo[key]);
+
+          marker = L.marker(filteredInfo[key][0].location, {icon: blackIcon}).addTo(mymap).bindPopup(key);
+
+          marker.on('mouseover', showPopup);
+          marker.on('mouseout', hidePopup);
+          marker.on('click', function clickedPopup(e,){
+            this.openPopup();
+            currentCountry = key
+            updateTable(key, filteredInfo[key][0].data);
+          });
+
+          var markerL = new L.FeatureGroup();
+          markerL.addLayer(marker)
+
+          mymap.addLayer(markerL)
+
+          markerLayers[key] = markerL
+         
+        })
+
+
+      }
+
+      function showPopup(){
+        this.openPopup();
+      }
+
+      function hidePopup(){
+        this.closePopup();
+      }
+      
+
+
+
+      function updateTable(country, tableInfo){
+
+        var title = document.getElementById("sponsorTitle");
+        title.innerHTML = "WIN projects in " + country;
+
+
+        var tableRef = document.getElementById("sponsorList");
+        tableRef.innerHTML = "";
+
+        console.log(tableInfo)
+
+        var centerTitle = document.createElement("H3");
+        centerTitle.setAttribute('style', 'text-align: center');
+        centerTitle.innerHTML = country;
+        tableRef.appendChild(centerTitle)
+
+        var table = document.createElement("TABLE");
+        table.setAttribute('class', 'container');
+        table.setAttribute('style', 'text-align: center');
+        tableRef.appendChild(table)
+
+
+        var header = table.appendChild(document.createElement('thead'))
+        header.setAttribute('style', 'text-align: center');
+        var row = header.insertRow(0);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        cell1.outerHTML = "<th class=\"row-tile\" style=\"text-align: center\">Title</th>";
+        cell2.outerHTML = "<th class=\"row-sponsor\" style=\"text-align: center\">Sponsor</th>";
+        cell3.outerHTML = "<th class=\"row-date\" style=\"text-align: center\">Date</th>";
+        cell4.outerHTML = "<th class=\"row-subject\" style=\"text-align: center\">Subject Terms</th>";
+        cell5.outerHTML = "<th class=\"row-general\" style=\"text-align: center\">General Terms</th>";
+        cell6.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
+
+        var body = table.appendChild(document.createElement('tbody'))
+
+
+        for(var i = 0; i < tableInfo.length; i+=1){
+          
+          // Insert a row at the end of the table
+          var newRow = body.insertRow(-1);
+
+          // Insert a cell in the row at index 0
+          var newCell1 = newRow.insertCell(0);
+          var newCell2 = newRow.insertCell(1);
+          var newCell3 = newRow.insertCell(2);
+          var newCell4 = newRow.insertCell(3);
+          var newCell5 = newRow.insertCell(4);
+          var newCell6 = newRow.insertCell(5);
+
+          // Append a text node to the cell
+
+          var aTag = document.createElement("A");
+
+
+          if(tableInfo[i].title == null){
+            var newText1 = document.createTextNode("");
+          }
+          else{
+            var newText1 = document.createTextNode(tableInfo[i].title);
+          }
+
+          if(tableInfo[i].sponsor == null){
+            var newText2 = document.createTextNode("");
+          }
+          else{
+            var newText2 = document.createTextNode(tableInfo[i].sponsor);
+          }
+
+          if(tableInfo[i].date == null){
+            var newText3 = document.createTextNode("");
+          }
+          else{
+            var tableDate = new Date(tableInfo[i].date)
+            var newText3 = document.createTextNode(formatDate(tableDate));
+          }
+
+          if(tableInfo[i].Subject == null){
+            var newText4 = document.createTextNode("");
+          }
+          else{
+            var split = tableInfo[i].Subject.split("|")
+            var newSubject = split[0];
+            for(var x = 1; x < split.length; x += 1){
+              newSubject += ", "
+              newSubject += split[x]
+            }
+            var newText4 = document.createTextNode(newSubject);
+          }
+
+          if(tableInfo[i].General == null){
+            var newText5 = document.createTextNode("");
+          }
+          else{
+            var split = tableInfo[i].General.split("|")
+            var newGeneral = split[0];
+            for(var x = 1; x < split.length; x += 1){
+              newGeneral += ", "
+              newGeneral += split[x]
+            }
+
+
+            var newText5 = document.createTextNode(newGeneral);
+          }
+
+
+
+          if(tableInfo[i].URL == null){
+            var newText6 = document.createTextNode("");
+          }
+          else{
+            var newText6 = document.createTextNode(tableInfo[i].URL);
+
+            aTag.setAttribute('href', tableInfo[i].URL);
+            aTag.setAttribute('target', "_blank");
+          }
+
+
+          newCell1.appendChild(newText1);
+          newCell2.appendChild(newText2);
+          newCell3.appendChild(newText3);
+          newCell4.appendChild(newText4);
+          newCell5.appendChild(newText5);
+
+          aTag.appendChild(newText6);
+          newCell6.appendChild(aTag);
+        }
+      }
+      
+    </script>
+    <script src="slider.js"></script>
+    <script src="checkbox.js"></script>
+    
+  </body>
+</html>
