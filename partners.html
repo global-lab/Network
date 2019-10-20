@@ -27,7 +27,7 @@
       }
 
       .ticks text{
-        fill: black;
+        fill: #E0E0E0;
         font-size: 10px;
       }
 
@@ -265,8 +265,8 @@
         northEast = L.latLng(90, 250),
         bounds = L.latLngBounds(southWest, northEast);
 
-        var blackIcon = new L.Icon({
-          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png',
+        var redIcon = new L.Icon({
+          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
           shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
           iconSize: [25, 41],
           iconAnchor: [12, 41],
@@ -288,7 +288,7 @@
         Object.keys(filteredInfo).forEach(function(key) {
           // console.log(key, filteredInfo[key]);
 
-          marker = L.marker(filteredInfo[key][0].location, {icon: blackIcon}).addTo(mymap).bindPopup(key);
+          marker = L.marker(filteredInfo[key][0].location, {icon: redIcon}).addTo(mymap).bindPopup(key);
 
           marker.on('mouseover', showPopup);
           marker.on('mouseout', hidePopup);
@@ -332,11 +332,6 @@
         tableRef.innerHTML = "";
 
         console.log(sponsorCenterInfo)
-
-        var centerTitle = document.createElement("H3");
-        centerTitle.setAttribute('style', 'text-align: center');
-        centerTitle.innerHTML = country;
-        tableRef.appendChild(centerTitle)
 
         var table = document.createElement("TABLE");
         table.setAttribute('class', 'container');

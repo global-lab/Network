@@ -38,7 +38,7 @@ var text1 = svgSlider.append("text")
             .attr("x", 20)
             .attr("y", 40)
             .attr("font-size", "20px")
-            .attr("fill", "black")
+            .attr("fill", "#E0E0E0")
             .text("Earliest desired project date: " + formatDate(startDate));
 
 
@@ -76,7 +76,7 @@ var handle = slider.insert("circle", ".track-overlay")
 
 var label = slider.append("text")  
     .attr("class", "label")
-    .attr("style", "fill: black")
+    .attr("style", "fill: #E0E0E0")
     .attr("text-anchor", "middle")
     .text(formatDate(startDate))
     .attr("transform", "translate(0," + (-25) + ")")
@@ -120,7 +120,7 @@ var text2 = svgSlider2.append("text")
                   .attr("x", 20)
                   .attr("y", 40)
                   .attr("font-size", "20px")
-                  .attr("fill", "black")
+                  .attr("fill", "#E0E0E0")
                   .text("Latest desired project date: " + formatDate(endDate));
 
 
@@ -161,7 +161,7 @@ var handle2 = slider2.insert("circle", ".track-overlay")
 
 var label2 = slider2.append("text")  
     .attr("class", "label")
-    .attr("style", "fill: black")
+    .attr("style", "fill: #E0E0E0")
     .attr("text-anchor", "middle")
     .text(formatDate(endDate))
     .attr("x", xScale(endDate))
@@ -182,7 +182,7 @@ function update2(h) {
 }
 
 
-var currentChoices = [];
+
 
 function updateData(){
     // console.log(beforeDate)
@@ -211,11 +211,15 @@ function updateData(){
                     if(currentChoices.includes(split[x])){
                       has = true
                     }
+                    else{
+                      
+                      break
+                    }
                   }
 
                   if(!has){
                     filteredInfo[key][0].data.splice(i, 1);
-                    i--;
+                      i--;
                   }
 
                 }
