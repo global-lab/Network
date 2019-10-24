@@ -1,10 +1,8 @@
 
 
-d3.selectAll(".myCheckbox").on("change",update);
+d3.selectAll(".myCheckbox").on("change", updateChoices);
 
-var currentChoices = [];
-
-function update(){
+function updateChoices(){
 
     var choices = [];
     d3.selectAll(".myCheckbox").each(function(d){
