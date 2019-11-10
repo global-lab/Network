@@ -8,14 +8,26 @@ var startDate = new Date("1998-01-01"),
 var beforeDate = startDate;
 var afterDate = endDate;
 
+
+
+div = document.getElementById("timeline")
+padding = parseInt(window.getComputedStyle(div, null).getPropertyValue('padding-left').replace('px',''))
+// console.log(div.clientWidth - (div.clientWidth*0.1))
+// console.log(div.clientWidth)
+// console.log(window.getComputedStyle(div, null).getPropertyValue('padding-left'))
+// console.log(parseInt(padding))
+
+width = div.clientWidth - (padding * 2)
+
+
 var svgSlider = d3.select("#timeline")
   .append("svg")
-  .attr("width", 450)
+  .attr("width", width)
   .attr("height", 150);
 
 var xScale = d3.scaleTime()
   .domain([startDate, endDate])
-  .range([0, 350])
+  .range([0, width-100])
   .clamp(true);
 
 
@@ -24,7 +36,7 @@ var borderPath = svgSlider.append("rect")
   .attr("x", 0)
   .attr("y", 10)
   .attr("height", 140)
-  .attr("width",450)
+  .attr("width", width)
   .style("fill", "#597288")
   .style("stroke-width", 2);
 
@@ -98,7 +110,7 @@ function update(h) {
 
 var svgSlider2 = d3.select("#timeline")
   .append("svg")
-  .attr("width", 450)
+  .attr("width", width)
   .attr("height", 150);
 
 
@@ -106,7 +118,7 @@ var borderPath2 = svgSlider2.append("rect")
   .attr("x", 0)
   .attr("y", 10)
   .attr("height", 140)
-  .attr("width",450)
+  .attr("width", width)
   .style("fill", "#597288")
   .style("stroke-width", 2);
 
@@ -182,7 +194,7 @@ function update2(h) {
 }
 
 
-
+var currentChoices = [];
 
 function updateData(){
     // console.log(beforeDate)
