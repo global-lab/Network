@@ -187,9 +187,19 @@
       <div class="col-sm-12" id="timeline">
 
       </div>
+      <div class="col-sm-12">
+        <div class="col-sm-6" style="text-align: center">
+          <h5>Clear All Filters</h5>
+          <button id="clear" type="button" class="btn-lg btn-info btn-block" onclick="clearFilters()">Clear</button>
+        </div>
+        <div class="col-sm-6" style="text-align: center">
+          <h5>Download a CSV file based on your current filters</h5>
+          <button id="downloadButton" type="button" class="btn-lg btn-info btn-block" onclick="download_csv()">Download</button>
+        </div>
+      </div>
 
       <div class="col-sm-12">
-        <div class="checkbox">
+        <div class="checkbox" id="check">
           <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Accessibility">Accessibility</label>
           <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Animals">Animals</label>
           <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Biomedical">Biomedical</label>
@@ -324,6 +334,7 @@
 
       var sponsorInfo = {};
       var filteredInfo = {};
+      var currentInfo = {};
 
 
 
@@ -367,6 +378,7 @@
         filteredInfo = _.cloneDeep(sponsorInfo);
 
         createMap();
+        updateTable();
         
       });
 
@@ -410,6 +422,7 @@
             this.openPopup();
             currentCountry = key
             updateTable(key, filteredInfo[key][0].data);
+            currentInfo = filteredInfo[key][0].data;
           });
 
           var markerL = new L.FeatureGroup();
@@ -575,6 +588,333 @@
           aTag.appendChild(newText6);
           newCell6.appendChild(aTag);
         }
+      }
+
+
+
+
+      function updateTable(country, WINCenterInfo){
+
+        console.log(filteredInfo)
+        console.log(country)
+
+        var tableRef = document.getElementById("sponsorList");
+        tableRef.innerHTML = "";
+
+        if(country != null){
+
+          var centerTitle = document.createElement("H3");
+          centerTitle.setAttribute('style', 'text-align: center');
+          centerTitle.innerHTML = country;
+          tableRef.appendChild(centerTitle)
+        
+          var table = document.createElement("TABLE");
+          table.setAttribute('class', 'container');
+          tableRef.appendChild(table)
+
+          var header = table.appendChild(document.createElement('thead'))
+          header.setAttribute('style', 'text-align: center');
+          var row = header.insertRow(0);
+          var cell1 = row.insertCell(0);
+          var cell2 = row.insertCell(1);
+          var cell3 = row.insertCell(2);
+          var cell4 = row.insertCell(3);
+          var cell5 = row.insertCell(4);
+          var cell6 = row.insertCell(5);
+          cell1.outerHTML = "<th class=\"row-tile\" style=\"text-align: center\">Title</th>";
+          cell2.outerHTML = "<th class=\"row-sponsor\" style=\"text-align: center\">Sponsor</th>";
+          cell3.outerHTML = "<th class=\"row-date\" style=\"text-align: center\">Date</th>";
+          cell4.outerHTML = "<th class=\"row-subject\" style=\"text-align: center\">Subject Terms</th>";
+          cell5.outerHTML = "<th class=\"row-general\" style=\"text-align: center\">General Terms</th>";
+          cell6.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
+
+          var body = table.appendChild(document.createElement('tbody'))
+
+          info = filteredInfo[country][0].data
+
+          info.sort();
+          info = [...new Set(info)];
+
+          for(var i = 0; i < info.length; i+=1){
+          
+            var newRow = body.insertRow(-1);
+
+            var newCell1 = newRow.insertCell(0);
+            var newCell2 = newRow.insertCell(1);
+            var newCell3 = newRow.insertCell(2);
+            var newCell4 = newRow.insertCell(3);
+            var newCell5 = newRow.insertCell(4);
+            var newCell6 = newRow.insertCell(5);
+
+            var aTag = document.createElement("A");
+
+            if(info[i].title == null){
+              var newText1 = document.createTextNode("");
+            }
+            else{
+              var newText1 = document.createTextNode(info[i].title);
+            }
+
+            if(info[i].sponsor == null){
+              var newText2 = document.createTextNode("");
+            }
+            else{
+              var newText2 = document.createTextNode(info[i].sponsor);
+            }
+
+            if(info[i].date == null){
+              var newText3 = document.createTextNode("");
+            }
+            else{
+              var tableDate = new Date(info[i].date)
+              var newText3 = document.createTextNode(formatDate(tableDate));
+            }
+
+            if(info[i].Subject == null){
+              var newText4 = document.createTextNode("");
+            }
+            else{
+              var split = info[i].Subject.split("|")
+              var newSubject = split[0];
+              for(var x = 1; x < split.length; x += 1){
+                newSubject += ", "
+                newSubject += split[x]
+              }
+              var newText4 = document.createTextNode(newSubject);
+            }
+
+            if(info[i].General == null){
+              var newText5 = document.createTextNode("");
+            }
+            else{
+              var split = info[i].General.split("|")
+              var newGeneral = split[0];
+              for(var x = 1; x < split.length; x += 1){
+                newGeneral += ", "
+                newGeneral += split[x]
+              }
+
+
+              var newText5 = document.createTextNode(newGeneral);
+            }
+
+
+
+            if(info[i].URL == null){
+              var newText6 = document.createTextNode("");
+            }
+            else{
+              var newText6 = document.createTextNode(info[i].URL);
+
+              aTag.setAttribute('href', info[i].URL);
+              aTag.setAttribute('target', "_blank");
+            }
+
+
+            newCell1.appendChild(newText1);
+            newCell2.appendChild(newText2);
+            newCell3.appendChild(newText3);
+            newCell4.appendChild(newText4);
+            newCell5.appendChild(newText5);
+
+            aTag.appendChild(newText6);
+            newCell6.appendChild(aTag);
+          }
+        }
+        else{
+          Object.keys(filteredInfo).forEach(function(key) {
+
+            if(filteredInfo[key][0].data.length != 0){
+              var centerTitle = document.createElement("H3");
+              centerTitle.setAttribute('style', 'text-align: center');
+              centerTitle.innerHTML = key;
+              tableRef.appendChild(centerTitle)
+            
+              var table = document.createElement("TABLE");
+              table.setAttribute('class', 'container');
+              tableRef.appendChild(table)
+
+              var header = table.appendChild(document.createElement('thead'))
+              header.setAttribute('style', 'text-align: center');
+              var row = header.insertRow(0);
+              var cell1 = row.insertCell(0);
+              var cell2 = row.insertCell(1);
+              var cell3 = row.insertCell(2);
+              var cell4 = row.insertCell(3);
+              var cell5 = row.insertCell(4);
+              var cell6 = row.insertCell(5);
+              cell1.outerHTML = "<th class=\"row-tile\" style=\"text-align: center\">Title</th>";
+              cell2.outerHTML = "<th class=\"row-sponsor\" style=\"text-align: center\">Sponsor</th>";
+              cell3.outerHTML = "<th class=\"row-date\" style=\"text-align: center\">Date</th>";
+              cell4.outerHTML = "<th class=\"row-subject\" style=\"text-align: center\">Subject Terms</th>";
+              cell5.outerHTML = "<th class=\"row-general\" style=\"text-align: center\">General Terms</th>";
+              cell6.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
+
+              var body = table.appendChild(document.createElement('tbody'))
+
+              info = filteredInfo[key][0].data
+
+              info.sort();
+              info = [...new Set(info)];
+
+              for(var i = 0; i < info.length; i+=1){
+              
+                var newRow = body.insertRow(-1);
+
+                var newCell1 = newRow.insertCell(0);
+                var newCell2 = newRow.insertCell(1);
+                var newCell3 = newRow.insertCell(2);
+                var newCell4 = newRow.insertCell(3);
+                var newCell5 = newRow.insertCell(4);
+                var newCell6 = newRow.insertCell(5);
+
+                var aTag = document.createElement("A");
+
+                if(info[i].title == null){
+                  var newText1 = document.createTextNode("");
+                }
+                else{
+                  var newText1 = document.createTextNode(info[i].title);
+                }
+
+                if(info[i].sponsor == null){
+                  var newText2 = document.createTextNode("");
+                }
+                else{
+                  var newText2 = document.createTextNode(info[i].sponsor);
+                }
+
+                if(info[i].date == null){
+                  var newText3 = document.createTextNode("");
+                }
+                else{
+                  var tableDate = new Date(info[i].date)
+                  var formatDate = d3.timeFormat("%b %Y");
+                  var newText3 = document.createTextNode(formatDate(tableDate));
+                }
+
+                if(info[i].Subject == null){
+                  var newText4 = document.createTextNode("");
+                }
+                else{
+                  var split = info[i].Subject.split("|")
+                  var newSubject = split[0];
+                  for(var x = 1; x < split.length; x += 1){
+                    newSubject += ", "
+                    newSubject += split[x]
+                  }
+                  var newText4 = document.createTextNode(newSubject);
+                }
+
+                if(info[i].General == null){
+                  var newText5 = document.createTextNode("");
+                }
+                else{
+                  var split = info[i].General.split("|")
+                  var newGeneral = split[0];
+                  for(var x = 1; x < split.length; x += 1){
+                    newGeneral += ", "
+                    newGeneral += split[x]
+                  }
+
+
+                  var newText5 = document.createTextNode(newGeneral);
+                }
+
+
+
+                if(info[i].URL == null){
+                  var newText6 = document.createTextNode("");
+                }
+                else{
+                  var newText6 = document.createTextNode(info[i].URL);
+
+                  aTag.setAttribute('href', info[i].URL);
+                  aTag.setAttribute('target', "_blank");
+                }
+
+
+                newCell1.appendChild(newText1);
+                newCell2.appendChild(newText2);
+                newCell3.appendChild(newText3);
+                newCell4.appendChild(newText4);
+                newCell5.appendChild(newText5);
+
+                aTag.appendChild(newText6);
+                newCell6.appendChild(aTag);
+              }
+            }
+          });
+        }
+        
+
+          
+      }
+
+
+      function clearFilters(){
+        updateTable(null, null)
+        currentInfo = {}
+        currentCountry = null
+
+        update(new Date("1998-01-01"))
+        update2(new Date("2020-02-01"))
+
+
+
+        var checkboxes = document.getElementsByTagName('input');
+        for(i = 0; i < checkboxes.length; i++){
+          if (checkboxes[i].type == 'checkbox') {
+              checkboxes[i].checked = false;
+          }
+        }
+        currentChoices = [];
+        updateData();
+        
+      }
+      
+
+
+      function download_csv() {
+        console.log(filteredInfo)
+        console.log(currentInfo)
+        if(Object.keys(currentInfo).length != 0){
+          
+
+          var csv = 'Title,Sponsor,Date,SubjectTerms,GeneralTerms,ProjectCenter,Link\n';
+          currentInfo.forEach(function(row) {
+            text = "" + row.title.replace(/,\r\n|\n|\r/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.Subject.replace(/,/g, "") + "," + row.General.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.URL
+            csv += text;
+            csv += "\n";
+          });
+     
+        }
+        else{
+          var csv = 'Title,Sponsor,Date,SubjectTerms,GeneralTerms,ProjectCenter,Link\n';
+          Object.keys(filteredInfo).forEach(function(key) {
+            if(filteredInfo[key][0].data.length != 0){
+              // console.log(key)
+              // console.log(filteredInfo[key])
+              csv += key.replace(/,/g, "") + "\n"
+              filteredInfo[key][0].data.forEach(function(row){
+                text = "" + row.title.replace(/,\r\n|\n|\r/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.Subject.replace(/,/g, "") + "," + row.General.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.URL
+                console.log(text)
+                csv += text;
+                csv += "\n";
+              })
+
+              csv += "\n"
+            }
+          });
+        }
+
+        // console.log(csv);
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'Categories.csv';
+        hiddenElement.click();
+        
       }
       
     </script>

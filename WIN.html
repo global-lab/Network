@@ -607,7 +607,7 @@
 
           var csv = 'Title,Sponsor,Date,ProjectCenter,Link\n';
           currentInfo.forEach(function(row) {
-            text = "" + row.title.replace(/,/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.link
+            text = "" + row.title.replace(/,\r\n|\n|\r/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.URL
             csv += text;
             csv += "\n";
           });
@@ -616,17 +616,18 @@
         else{
           var csv = 'Title,Sponsor,Date,ProjectCenter,Link\n';
           Object.keys(filteredInfo).forEach(function(key) {
-            // console.log(key)
-            // console.log(filteredInfo[key])
-            csv += key.replace(/,/g, "") + "\n"
-            filteredInfo[key][0].data.forEach(function(row){
-              text = "" + row.title.replace(/,/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.URL
-              csv += text;
-              csv += "\n";
-            })
+            if(filteredInfo[key][0].data.length != 0){
+              // console.log(key)
+              // console.log(filteredInfo[key])
+              csv += key.replace(/,/g, "") + "\n"
+              filteredInfo[key][0].data.forEach(function(row){
+                text = "" + row.title.replace(/,\r\n|\n|\r/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.URL
+                csv += text;
+                csv += "\n";
+              })
 
-            csv += "\n"
-            
+              csv += "\n"
+            }
           });
         }
 

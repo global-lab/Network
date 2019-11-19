@@ -537,17 +537,18 @@
         else{
           var csv = 'ProjectPartners,ProjectCenter,Date\n';
           Object.keys(filteredInfo).forEach(function(key) {
-            // console.log(key)
-            // console.log(filteredInfo[key])
-            csv += key.replace(/,/g, "") + "\n"
-            filteredInfo[key][0].data.forEach(function(row){
-              text = "" + row.sponsor.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.date.replace(/,/g, "")
-              csv += text;
-              csv += "\n";
-            })
+            if(filteredInfo[key][0].data.length != 0){
+              // console.log(key)
+              // console.log(filteredInfo[key])
+              csv += key.replace(/,/g, "") + "\n"
+              filteredInfo[key][0].data.forEach(function(row){
+                text = "" + row.sponsor.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.date.replace(/,/g, "")
+                csv += text;
+                csv += "\n";
+              })
 
-            csv += "\n"
-            
+              csv += "\n"
+            }            
           });
         }
 
