@@ -256,6 +256,9 @@ function updateData(){
     if(currentCountry != null){
       updateTable(currentCountry, filteredInfo[currentCountry][0].data);
     }
+    else{
+      updateTable(null, null)
+    }
     
     hideShow()
 }

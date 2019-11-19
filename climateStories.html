@@ -181,8 +181,21 @@
     <div class="col-sm-8" id="chartdiv">
       <div id="mapid"></div>
     </div>
-    <div class="col-sm-4" id="timeline">
-      
+    <div class="col-sm-4">
+      <div class="col-sm-12" id="timeline">
+
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-6" style="text-align: center">
+          <h5>Clear All Filters</h5>
+          <button id="clear" type="button" class="btn-lg btn-info btn-block" onclick="clearFilters()">Clear</button>
+        </div>
+        <div class="col-sm-6" style="text-align: center">
+          <h5>Download a CSV file based on your current filters</h5>
+          <button id="downloadButton" type="button" class="btn-lg btn-info btn-block" onclick="download_csv()">Download</button>
+        </div>
+      </div>
     </div>
     
 
@@ -271,6 +284,7 @@
 
       var sponsorInfo = {};
       var filteredInfo = {};
+      var currentInfo = {};
 
 
 
@@ -314,6 +328,7 @@
         filteredInfo = _.cloneDeep(sponsorInfo);
 
         createMap();
+        updateTable();
         
       });
 
@@ -357,6 +372,7 @@
             this.openPopup();
             currentCountry = key
             updateTable(key, filteredInfo[key][0].data);
+            currentInfo = filteredInfo[key][0].data;
           });
 
           var markerL = new L.FeatureGroup();
@@ -378,100 +394,244 @@
       function hidePopup(){
         this.closePopup();
       }
-      
-
-
+    
 
       function updateTable(country, WINCenterInfo){
 
-        var title = document.getElementById("sponsorTitle");
-        title.innerHTML = "Projects in " + country;
-
+        // console.log(filteredInfo)
+        // console.log(country)
 
         var tableRef = document.getElementById("sponsorList");
         tableRef.innerHTML = "";
 
-        console.log(WINCenterInfo)
+        if(country != null){
 
-        var table = document.createElement("TABLE");
-        table.setAttribute('class', 'container');
-        table.setAttribute('style', 'text-align: center');
-        tableRef.appendChild(table)
+          var centerTitle = document.createElement("H3");
+          centerTitle.setAttribute('style', 'text-align: center');
+          centerTitle.innerHTML = country;
+          tableRef.appendChild(centerTitle)
+        
+          var table = document.createElement("TABLE");
+          table.setAttribute('class', 'container');
+          tableRef.appendChild(table)
 
+          var header = table.appendChild(document.createElement('thead'))
+          header.setAttribute('style', 'text-align: center');
+          var row = header.insertRow(0);
+          var cell1 = row.insertCell(0);
+          var cell2 = row.insertCell(1);
+          var cell3 = row.insertCell(2);
+          var cell4 = row.insertCell(3);
+          cell1.outerHTML = "<th class=\"row-tile\" style=\"text-align: center\">Title</th>";
+          cell2.outerHTML = "<th class=\"row-sponsor\" style=\"text-align: center\">Sponsor</th>";
+          cell3.outerHTML = "<th class=\"row-date\" style=\"text-align: center\">Date</th>";
+          cell4.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
 
-        var header = table.appendChild(document.createElement('thead'))
-        header.setAttribute('style', 'text-align: center');
-        var row = header.insertRow(0);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-        cell1.outerHTML = "<th class=\"row-tile\" style=\"text-align: center\">Title</th>";
-        cell2.outerHTML = "<th class=\"row-sponsor\" style=\"text-align: center\">Sponsor</th>";
-        cell3.outerHTML = "<th class=\"row-date\" style=\"text-align: center\">Date</th>";
-        cell4.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
+          var body = table.appendChild(document.createElement('tbody'))
 
-        var body = table.appendChild(document.createElement('tbody'))
+          info = filteredInfo[country][0].data
 
+          info.sort();
+          info = [...new Set(info)];
 
-        for(var i = 0; i < WINCenterInfo.length; i+=1){
+          for(var i = 0; i < info.length; i+=1){
           
-          // Insert a row at the end of the table
-          var newRow = body.insertRow(-1);
+            var newRow = body.insertRow(-1);
 
-          // Insert a cell in the row at index 0
-          var newCell1 = newRow.insertCell(0);
-          var newCell2 = newRow.insertCell(1);
-          var newCell3 = newRow.insertCell(2);
-          var newCell4 = newRow.insertCell(3);
+            var newCell1 = newRow.insertCell(0);
+            var newCell2 = newRow.insertCell(1);
+            var newCell3 = newRow.insertCell(2);
+            var newCell4 = newRow.insertCell(3);
 
-          // Append a text node to the cell
+            var aTag = document.createElement("A");
 
-          var aTag = document.createElement("A");
+            if(info[i].title == null){
+              var newText1 = document.createTextNode("");
+            }
+            else{
+              var newText1 = document.createTextNode(info[i].title);
+            }
+
+            if(info[i].sponsor == null){
+              var newText2 = document.createTextNode("");
+            }
+            else{
+              var newText2 = document.createTextNode(info[i].sponsor);
+            }
+
+            if(info[i].date == null){
+              var newText3 = document.createTextNode("");
+            }
+            else{
+              var tableDate = new Date(info[i].date)
+              console.log(tableDate)
+              var newText3 = document.createTextNode(formatDate(tableDate));
+            }
+
+            if(info[i].URL == null){
+              var newText4 = document.createTextNode("");
+            }
+            else{
+              var newText4 = document.createTextNode(info[i].URL);
+
+              aTag.setAttribute('href', info[i].URL);
+              aTag.setAttribute('target', "_blank");
+            }
 
 
-          if(WINCenterInfo[i].title == null){
-            var newText1 = document.createTextNode("");
+            newCell1.appendChild(newText1);
+            newCell2.appendChild(newText2);
+            newCell3.appendChild(newText3);
+
+            aTag.appendChild(newText4);
+            newCell4.appendChild(aTag);
           }
-          else{
-            var newText1 = document.createTextNode(WINCenterInfo[i].title);
-          }
-
-          if(WINCenterInfo[i].sponsor == null){
-            var newText2 = document.createTextNode("");
-          }
-          else{
-            var newText2 = document.createTextNode(WINCenterInfo[i].sponsor);
-          }
-
-          if(WINCenterInfo[i].date == null){
-            var newText3 = document.createTextNode("");
-          }
-          else{
-            var tableDate = new Date(WINCenterInfo[i].date)
-            console.log(tableDate)
-            var newText3 = document.createTextNode(formatDate(tableDate));
-          }
-
-          if(WINCenterInfo[i].URL == null){
-            var newText4 = document.createTextNode("");
-          }
-          else{
-            var newText4 = document.createTextNode(WINCenterInfo[i].URL);
-
-            aTag.setAttribute('href', WINCenterInfo[i].URL);
-            aTag.setAttribute('target', "_blank");
-          }
-
-
-          newCell1.appendChild(newText1);
-          newCell2.appendChild(newText2);
-          newCell3.appendChild(newText3);
-
-          aTag.appendChild(newText4);
-          newCell4.appendChild(aTag);
         }
+        else{
+          Object.keys(filteredInfo).forEach(function(key) {
+
+            if(filteredInfo[key][0].data.length != 0){
+              var centerTitle = document.createElement("H3");
+              centerTitle.setAttribute('style', 'text-align: center');
+              centerTitle.innerHTML = key;
+              tableRef.appendChild(centerTitle)
+            
+              var table = document.createElement("TABLE");
+              table.setAttribute('class', 'container');
+              tableRef.appendChild(table)
+
+              var header = table.appendChild(document.createElement('thead'))
+              header.setAttribute('style', 'text-align: center');
+              var row = header.insertRow(0);
+              var cell1 = row.insertCell(0);
+              var cell2 = row.insertCell(1);
+              var cell3 = row.insertCell(2);
+              var cell4 = row.insertCell(3);
+              cell1.outerHTML = "<th class=\"row-tile\" style=\"text-align: center\">Title</th>";
+              cell2.outerHTML = "<th class=\"row-sponsor\" style=\"text-align: center\">Sponsor</th>";
+              cell3.outerHTML = "<th class=\"row-date\" style=\"text-align: center\">Date</th>";
+              cell4.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
+
+              var body = table.appendChild(document.createElement('tbody'))
+
+              info = filteredInfo[key][0].data
+
+              info.sort();
+              info = [...new Set(info)];
+
+              for(var i = 0; i < info.length; i+=1){
+          
+                var newRow = body.insertRow(-1);
+
+                var newCell1 = newRow.insertCell(0);
+                var newCell2 = newRow.insertCell(1);
+                var newCell3 = newRow.insertCell(2);
+                var newCell4 = newRow.insertCell(3);
+
+                var aTag = document.createElement("A");
+
+                if(info[i].title == null){
+                  var newText1 = document.createTextNode("");
+                }
+                else{
+                  var newText1 = document.createTextNode(info[i].title);
+                }
+
+                if(info[i].sponsor == null){
+                  var newText2 = document.createTextNode("");
+                }
+                else{
+                  var newText2 = document.createTextNode(info[i].sponsor);
+                }
+
+                if(info[i].date == null){
+                  var newText3 = document.createTextNode("");
+                }
+                else{
+                  var tableDate = new Date(info[i].date)
+                  var formatDate = d3.timeFormat("%b %Y");
+                  // console.log(tableDate)
+                  var newText3 = document.createTextNode(formatDate(tableDate));
+                }
+
+                if(info[i].URL == null){
+                  var newText4 = document.createTextNode("");
+                }
+                else{
+                  var newText4 = document.createTextNode(info[i].URL);
+
+                  aTag.setAttribute('href', info[i].URL);
+                  aTag.setAttribute('target', "_blank");
+                }
+
+
+                newCell1.appendChild(newText1);
+                newCell2.appendChild(newText2);
+                newCell3.appendChild(newText3);
+
+                aTag.appendChild(newText4);
+                newCell4.appendChild(aTag);
+              }
+            }
+          });
+        }
+        
+
+          
       }
+
+
+      function clearFilters(){
+        updateTable(null, null)
+        currentInfo = {}
+        currentCountry = null
+
+        update(new Date("1998-01-01"))
+        update2(new Date("2020-02-01"))
+      }
+      
+
+
+      function download_csv() {
+        console.log(filteredInfo)
+        console.log(currentInfo)
+        if(Object.keys(currentInfo).length != 0){
+          
+
+          var csv = 'Title,Sponsor,Date,ProjectCenter,Link\n';
+          currentInfo.forEach(function(row) {
+            text = "" + row.title.replace(/,/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.link
+            csv += text;
+            csv += "\n";
+          });
+     
+        }
+        else{
+          var csv = 'Title,Sponsor,Date,ProjectCenter,Link\n';
+          Object.keys(filteredInfo).forEach(function(key) {
+            // console.log(key)
+            // console.log(filteredInfo[key])
+            csv += key.replace(/,/g, "") + "\n"
+            filteredInfo[key][0].data.forEach(function(row){
+              text = "" + row.title.replace(/,/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.URL
+              csv += text;
+              csv += "\n";
+            })
+
+            csv += "\n"
+            
+          });
+        }
+
+        // console.log(csv);
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'climateStories.csv';
+        hiddenElement.click();
+        
+      }
+
       
     </script>
     <script src="slider.js"></script>
