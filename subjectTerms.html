@@ -104,7 +104,7 @@
       .container {
           text-align: center;
           overflow: auto;
-          width: 80%;
+          width: 90%;
           margin: 0 auto;
         display: table;
         table-layout: fixed;
@@ -138,21 +138,23 @@
       }
 
       .row-tile {
-        width: 35%;
+        width: 25%;
       }
       .row-sponsor {
-        width: 20%;
+        width: 15%;
       }
       .row-date {
         width: 10%;
       }
       .row-link {
-        width: 35%;
+        width: 20%;
       }
-
-
-
-
+      .row-subject {
+        width: 15%;
+      }
+      .row-general {
+        width: 15%;
+      }
 
 
 
@@ -162,17 +164,16 @@
   <body>
 
     <div class="col-sm-12">
-      <h1>Climate Story Projects</h1>
+      <h1>Project by Subject Terms</h1>
     </div>
 
-    <div class="col-sm-8" id="chartdiv">
+    <div class="col-sm-7" id="chartdiv">
       <div id="mapid"></div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-5">
       <div class="col-sm-12" id="timeline">
 
       </div>
-
       <div class="col-sm-12">
         <div class="col-sm-6" style="text-align: center">
           <h5>Clear All Filters</h5>
@@ -183,14 +184,63 @@
           <button id="downloadButton" type="button" class="btn-lg btn-info btn-block" onclick="download_csv()">Download</button>
         </div>
       </div>
+
+      <div class="col-sm-12">
+        <div class="checkbox" id="check">
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Accessibility">Accessibility</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Animals">Animals</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Biomedical">Biomedical</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Business and Economics">Business and Economics</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Children">Children</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Climate Change">Climate Change</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Community Engagement">Community Engagement</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Computing">Computing</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Culture and Language">Culture and Language</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Education">Education</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Emerging Technologies">Emerging Technologies</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Energy">Energy</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Environmental Management">Environmental Management</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Food">Food</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Health and Wellbeing">Health and Wellbeing</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="History">History</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Industry and Manufacturing">Industry and Manufacturing</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Infrastructure/Buildings">Infrastructure/Buildings</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Innovation and Entrepreneurship">Innovation and Entrepreneurship</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Interactive Media">Interactive Media</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="International Relations">International Relations</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Libraries and Archives">Libraries and Archives</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Materials">Materials</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Museum">Museum</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Natural Resources">Natural Resources</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Organizational Management">Organizational Management</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Policy">Policy</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Politics">Politics</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Public Engagement">Public Engagement</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Public Services">Public Services</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Recreation">Recreation</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Rural Development">Rural Development</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Security">Security</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Social Justice">Social Justice</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Space">Space</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Sustainable Development">Sustainable Development</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Techniques">Techniques</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Tourism">Tourism</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Security">Transportation</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Urban Planning">Urban Planning</label>s
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Water">Water</label>
+          <label class="checkbox-inline"><input type="checkbox" class="myCheckbox" value="Women">Women</label>
+        </div>
+
+        
+      </div>
+      
     </div>
-    
 
     <br>
     <br>
 
     <div class="col-sm-12">
-      <h3 id="sponsorTitle" style="text-align: center;">Click on a location to see the Climate Story projects at that site</h3>
+      <h3 id="sponsorTitle" style="text-align: center;">Click on a location to see subject specific projects at that site</h3>
     </div>
 
     <div class="col-sm-12" id="sponsorList">
@@ -202,6 +252,7 @@
         <p></p>
       </footer>
     </div>
+    
     
     <script src="lodash.js"></script>
     <script>
@@ -274,7 +325,7 @@
 
 
 
-      d3.csv("climateStories.csv", function(data) {
+      d3.csv("IQPSubjects.csv", function(data) {
         console.log(data);
         
         data.forEach(function(info){
@@ -282,27 +333,27 @@
 
           if(info.ProjectCenter == "Worcester, MA"){
             if(sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"]){
-              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.Date, "URL": info.Link});
+              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms});
             }
             else{
-              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.Date, "URL": info.Link}], "location": projectCenters["Worcester Community Project Center (Massachusetts) - IQP"]}];
+              sponsorInfo["Worcester Community Project Center (Massachusetts) - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "Worcester Community Project Center (Massachusetts) - IQP", "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms}], "location": projectCenters["Worcester Community Project Center (Massachusetts) - IQP"]}];
             }
           }
           else if(info.ProjectCenter == ""){
             if(sponsorInfo["On Campus - IQP"]){
-              sponsorInfo["On Campus - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.Date, "URL": info.Link});
+              sponsorInfo["On Campus - IQP"][0].data.push({"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms});
             }
             else{
-              sponsorInfo["On Campus - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.Date, "URL": info.Link}], "location": projectCenters[""]}];
+              sponsorInfo["On Campus - IQP"] = [{"data": [{"title": info.Title, "sponsor": info.Sponsor, "center": "On Campus - IQP", "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms}], "location": projectCenters[""]}];
             }
           }
           else{
 
             if(sponsorInfo[info.ProjectCenter]){
-              sponsorInfo[info.ProjectCenter][0].data.push({"title": info.Title, "center": info.ProjectCenter, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link});
+              sponsorInfo[info.ProjectCenter][0].data.push({"title": info.Title, "center": info.ProjectCenter, "sponsor": info.Sponsor, "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms});
             }
             else{
-              sponsorInfo[info.ProjectCenter] = [{"data": [{"title": info.Title, "center": info.ProjectCenter, "sponsor": info.Sponsor, "date": info.Date, "URL": info.Link}], "location": projectCenters[info.ProjectCenter]}];
+              sponsorInfo[info.ProjectCenter] = [{"data": [{"title": info.Title, "center": info.ProjectCenter, "sponsor": info.Sponsor, "date": info.DateCreated, "URL": info.Link, "Subject": info.SubjectTerms, "General": info.GeneralTerms}], "location": projectCenters[info.ProjectCenter]}];
             }
           }
 
@@ -380,12 +431,159 @@
       function hidePopup(){
         this.closePopup();
       }
-    
+      
+
+
+
+      function updateTable(country, tableInfo){
+
+        var title = document.getElementById("sponsorTitle");
+
+        if(currentChoices.length == 0){
+          title.innerHTML = "Projects in " + country;
+        }
+        else{
+          t = currentChoices[0]
+          for(x = 1; x < currentChoices.length; x += 1){
+            t += ", "
+            t += currentChoices[x]
+          }
+
+          title.innerHTML = "Projects in " + country + " related to " + t;
+        }
+
+        
+
+
+        var tableRef = document.getElementById("sponsorList");
+        tableRef.innerHTML = "";
+
+        console.log(tableInfo)
+
+        var table = document.createElement("TABLE");
+        table.setAttribute('class', 'container');
+        table.setAttribute('style', 'text-align: center');
+        tableRef.appendChild(table)
+
+
+        var header = table.appendChild(document.createElement('thead'))
+        header.setAttribute('style', 'text-align: center');
+        var row = header.insertRow(0);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        cell1.outerHTML = "<th class=\"row-tile\" style=\"text-align: center\">Title</th>";
+        cell2.outerHTML = "<th class=\"row-sponsor\" style=\"text-align: center\">Sponsor</th>";
+        cell3.outerHTML = "<th class=\"row-date\" style=\"text-align: center\">Date</th>";
+        cell4.outerHTML = "<th class=\"row-subject\" style=\"text-align: center\">Subject Terms</th>";
+        cell5.outerHTML = "<th class=\"row-general\" style=\"text-align: center\">General Terms</th>";
+        cell6.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
+
+        var body = table.appendChild(document.createElement('tbody'))
+
+
+        for(var i = 0; i < tableInfo.length; i+=1){
+          
+          // Insert a row at the end of the table
+          var newRow = body.insertRow(-1);
+
+          // Insert a cell in the row at index 0
+          var newCell1 = newRow.insertCell(0);
+          var newCell2 = newRow.insertCell(1);
+          var newCell3 = newRow.insertCell(2);
+          var newCell4 = newRow.insertCell(3);
+          var newCell5 = newRow.insertCell(4);
+          var newCell6 = newRow.insertCell(5);
+
+          // Append a text node to the cell
+
+          var aTag = document.createElement("A");
+
+
+          if(tableInfo[i].title == null){
+            var newText1 = document.createTextNode("");
+          }
+          else{
+            var newText1 = document.createTextNode(tableInfo[i].title);
+          }
+
+          if(tableInfo[i].sponsor == null){
+            var newText2 = document.createTextNode("");
+          }
+          else{
+            var newText2 = document.createTextNode(tableInfo[i].sponsor);
+          }
+
+          if(tableInfo[i].date == null){
+            var newText3 = document.createTextNode("");
+          }
+          else{
+            var tableDate = new Date(tableInfo[i].date)
+            var newText3 = document.createTextNode(formatDate(tableDate));
+          }
+
+          if(tableInfo[i].Subject == null){
+            var newText4 = document.createTextNode("");
+          }
+          else{
+            var split = tableInfo[i].Subject.split("|")
+            var newSubject = split[0];
+            for(var x = 1; x < split.length; x += 1){
+              newSubject += ", "
+              newSubject += split[x]
+            }
+            var newText4 = document.createTextNode(newSubject);
+          }
+
+          if(tableInfo[i].General == null){
+            var newText5 = document.createTextNode("");
+          }
+          else{
+            var split = tableInfo[i].General.split("|")
+            var newGeneral = split[0];
+            for(var x = 1; x < split.length; x += 1){
+              newGeneral += ", "
+              newGeneral += split[x]
+            }
+
+
+            var newText5 = document.createTextNode(newGeneral);
+          }
+
+
+
+          if(tableInfo[i].URL == null){
+            var newText6 = document.createTextNode("");
+          }
+          else{
+            var newText6 = document.createTextNode(tableInfo[i].URL);
+
+            aTag.setAttribute('href', tableInfo[i].URL);
+            aTag.setAttribute('target', "_blank");
+          }
+
+
+          newCell1.appendChild(newText1);
+          newCell2.appendChild(newText2);
+          newCell3.appendChild(newText3);
+          newCell4.appendChild(newText4);
+          newCell5.appendChild(newText5);
+
+          aTag.appendChild(newText6);
+          newCell6.appendChild(aTag);
+        }
+      }
+
+
+
 
       function updateTable(country, WINCenterInfo){
 
-        // console.log(filteredInfo)
-        // console.log(country)
+        console.log(filteredInfo)
+        console.log(country)
 
         var tableRef = document.getElementById("sponsorList");
         tableRef.innerHTML = "";
@@ -408,10 +606,14 @@
           var cell2 = row.insertCell(1);
           var cell3 = row.insertCell(2);
           var cell4 = row.insertCell(3);
+          var cell5 = row.insertCell(4);
+          var cell6 = row.insertCell(5);
           cell1.outerHTML = "<th class=\"row-tile\" style=\"text-align: center\">Title</th>";
           cell2.outerHTML = "<th class=\"row-sponsor\" style=\"text-align: center\">Sponsor</th>";
           cell3.outerHTML = "<th class=\"row-date\" style=\"text-align: center\">Date</th>";
-          cell4.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
+          cell4.outerHTML = "<th class=\"row-subject\" style=\"text-align: center\">Subject Terms</th>";
+          cell5.outerHTML = "<th class=\"row-general\" style=\"text-align: center\">General Terms</th>";
+          cell6.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
 
           var body = table.appendChild(document.createElement('tbody'))
 
@@ -428,6 +630,8 @@
             var newCell2 = newRow.insertCell(1);
             var newCell3 = newRow.insertCell(2);
             var newCell4 = newRow.insertCell(3);
+            var newCell5 = newRow.insertCell(4);
+            var newCell6 = newRow.insertCell(5);
 
             var aTag = document.createElement("A");
 
@@ -450,15 +654,44 @@
             }
             else{
               var tableDate = new Date(info[i].date)
-              console.log(tableDate)
               var newText3 = document.createTextNode(formatDate(tableDate));
             }
 
-            if(info[i].URL == null){
+            if(info[i].Subject == null){
               var newText4 = document.createTextNode("");
             }
             else{
-              var newText4 = document.createTextNode(info[i].URL);
+              var split = info[i].Subject.split("|")
+              var newSubject = split[0];
+              for(var x = 1; x < split.length; x += 1){
+                newSubject += ", "
+                newSubject += split[x]
+              }
+              var newText4 = document.createTextNode(newSubject);
+            }
+
+            if(info[i].General == null){
+              var newText5 = document.createTextNode("");
+            }
+            else{
+              var split = info[i].General.split("|")
+              var newGeneral = split[0];
+              for(var x = 1; x < split.length; x += 1){
+                newGeneral += ", "
+                newGeneral += split[x]
+              }
+
+
+              var newText5 = document.createTextNode(newGeneral);
+            }
+
+
+
+            if(info[i].URL == null){
+              var newText6 = document.createTextNode("");
+            }
+            else{
+              var newText6 = document.createTextNode(info[i].URL);
 
               aTag.setAttribute('href', info[i].URL);
               aTag.setAttribute('target', "_blank");
@@ -468,9 +701,11 @@
             newCell1.appendChild(newText1);
             newCell2.appendChild(newText2);
             newCell3.appendChild(newText3);
+            newCell4.appendChild(newText4);
+            newCell5.appendChild(newText5);
 
-            aTag.appendChild(newText4);
-            newCell4.appendChild(aTag);
+            aTag.appendChild(newText6);
+            newCell6.appendChild(aTag);
           }
         }
         else{
@@ -493,10 +728,14 @@
               var cell2 = row.insertCell(1);
               var cell3 = row.insertCell(2);
               var cell4 = row.insertCell(3);
+              var cell5 = row.insertCell(4);
+              var cell6 = row.insertCell(5);
               cell1.outerHTML = "<th class=\"row-tile\" style=\"text-align: center\">Title</th>";
               cell2.outerHTML = "<th class=\"row-sponsor\" style=\"text-align: center\">Sponsor</th>";
               cell3.outerHTML = "<th class=\"row-date\" style=\"text-align: center\">Date</th>";
-              cell4.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
+              cell4.outerHTML = "<th class=\"row-subject\" style=\"text-align: center\">Subject Terms</th>";
+              cell5.outerHTML = "<th class=\"row-general\" style=\"text-align: center\">General Terms</th>";
+              cell6.outerHTML = "<th class=\"row-link\" style=\"text-align: center\">Link</th>";
 
               var body = table.appendChild(document.createElement('tbody'))
 
@@ -506,13 +745,15 @@
               info = [...new Set(info)];
 
               for(var i = 0; i < info.length; i+=1){
-          
+              
                 var newRow = body.insertRow(-1);
 
                 var newCell1 = newRow.insertCell(0);
                 var newCell2 = newRow.insertCell(1);
                 var newCell3 = newRow.insertCell(2);
                 var newCell4 = newRow.insertCell(3);
+                var newCell5 = newRow.insertCell(4);
+                var newCell6 = newRow.insertCell(5);
 
                 var aTag = document.createElement("A");
 
@@ -536,15 +777,44 @@
                 else{
                   var tableDate = new Date(info[i].date)
                   var formatDate = d3.timeFormat("%b %Y");
-                  // console.log(tableDate)
                   var newText3 = document.createTextNode(formatDate(tableDate));
                 }
 
-                if(info[i].URL == null){
+                if(info[i].Subject == null){
                   var newText4 = document.createTextNode("");
                 }
                 else{
-                  var newText4 = document.createTextNode(info[i].URL);
+                  var split = info[i].Subject.split("|")
+                  var newSubject = split[0];
+                  for(var x = 1; x < split.length; x += 1){
+                    newSubject += ", "
+                    newSubject += split[x]
+                  }
+                  var newText4 = document.createTextNode(newSubject);
+                }
+
+                if(info[i].General == null){
+                  var newText5 = document.createTextNode("");
+                }
+                else{
+                  var split = info[i].General.split("|")
+                  var newGeneral = split[0];
+                  for(var x = 1; x < split.length; x += 1){
+                    newGeneral += ", "
+                    newGeneral += split[x]
+                  }
+
+
+                  var newText5 = document.createTextNode(newGeneral);
+                }
+
+
+
+                if(info[i].URL == null){
+                  var newText6 = document.createTextNode("");
+                }
+                else{
+                  var newText6 = document.createTextNode(info[i].URL);
 
                   aTag.setAttribute('href', info[i].URL);
                   aTag.setAttribute('target', "_blank");
@@ -554,9 +824,11 @@
                 newCell1.appendChild(newText1);
                 newCell2.appendChild(newText2);
                 newCell3.appendChild(newText3);
+                newCell4.appendChild(newText4);
+                newCell5.appendChild(newText5);
 
-                aTag.appendChild(newText4);
-                newCell4.appendChild(aTag);
+                aTag.appendChild(newText6);
+                newCell6.appendChild(aTag);
               }
             }
           });
@@ -574,6 +846,18 @@
 
         update(new Date("1998-01-01"))
         update2(new Date("2020-02-01"))
+
+
+
+        var checkboxes = document.getElementsByTagName('input');
+        for(i = 0; i < checkboxes.length; i++){
+          if (checkboxes[i].type == 'checkbox') {
+              checkboxes[i].checked = false;
+          }
+        }
+        currentChoices = [];
+        updateData();
+        
       }
       
 
@@ -584,23 +868,24 @@
         if(Object.keys(currentInfo).length != 0){
           
 
-          var csv = 'Title,Sponsor,Date,ProjectCenter,Link\n';
+          var csv = 'Title,Sponsor,Date,SubjectTerms,GeneralTerms,ProjectCenter,Link\n';
           currentInfo.forEach(function(row) {
-            text = "" + row.title.replace(/,\r\n|\n|\r/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.URL
+            text = "" + row.title.replace(/,\r\n|\n|\r/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.Subject.replace(/,/g, "") + "," + row.General.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.URL
             csv += text;
             csv += "\n";
           });
      
         }
         else{
-          var csv = 'Title,Sponsor,Date,ProjectCenter,Link\n';
+          var csv = 'Title,Sponsor,Date,SubjectTerms,GeneralTerms,ProjectCenter,Link\n';
           Object.keys(filteredInfo).forEach(function(key) {
             if(filteredInfo[key][0].data.length != 0){
               // console.log(key)
               // console.log(filteredInfo[key])
               csv += key.replace(/,/g, "") + "\n"
               filteredInfo[key][0].data.forEach(function(row){
-                text = "" + row.title.replace(/,\r\n|\n|\r/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.URL
+                text = "" + row.title.replace(/,\r\n|\n|\r/g, "") + "," + row.sponsor.replace(/,/g, "") + "," + row.date.replace(/,/g, "") + "," + row.Subject.replace(/,/g, "") + "," + row.General.replace(/,/g, "") + "," + row.center.replace(/,/g, "") + "," + row.URL
+                console.log(text)
                 csv += text;
                 csv += "\n";
               })
@@ -614,14 +899,14 @@
         var hiddenElement = document.createElement('a');
         hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
         hiddenElement.target = '_blank';
-        hiddenElement.download = 'climateStories.csv';
+        hiddenElement.download = 'Categories.csv';
         hiddenElement.click();
         
       }
-
       
     </script>
     <script src="slider.js"></script>
+    <script src="checkbox.js"></script>
     
   </body>
 </html>
